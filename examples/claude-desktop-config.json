@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "evlek": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://evlek.app/api/mcp"
+      ]
+    }
+  }
+}

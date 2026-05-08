@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "evlek": {
+      "url": "https://evlek.app/api/mcp"
+    }
+  }
+}
