@@ -1,119 +1,128 @@
 {
-  "$schema": "https://modelcontextprotocol.io/schemas/registry/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.evlek/mcp-server",
-  "title": "Evlek — Northern Cyprus Property MCP Server",
-  "description": "AI-native property data for North Cyprus (KKTC). Search active listings, compare cities, estimate rental yield, look up KKTC legal procedures, get district profiles. Live data sourced from evlek.app — verified listings only, multilingual, optimized for the 6 cities of Northern Cyprus.",
-  "version": "1.2.0",
-  "isLatest": true,
-  "protocolVersion": "2025-11-05",
-  "transport": "streamable-http",
-  "endpoint": "https://evlek.app/api/mcp",
-  "documentation": "https://evlek.app/mcp",
+  "title": "Evlek â€” Northern Cyprus Property MCP Server",
+  "description": "AI-native property MCP for Northern Cyprus (KKTC). 9 read-only tools, hosted, multilingual.",
+  "version": "1.2.1",
+  "websiteUrl": "https://evlek.app/mcp",
   "repository": {
-    "url": "https://github.com/evlek/evlek-mcp",
-    "source": "github"
+    "url": "https://github.com/Evlek/evlek-mcp",
+    "source": "github",
+    "id": "1233174805"
   },
-  "homepage": "https://evlek.app",
-  "publisher": {
-    "name": "Evlek",
-    "url": "https://evlek.app",
-    "email": "hello@evlek.app"
-  },
-  "license": "MIT",
-  "categories": [
-    "real-estate",
-    "property",
-    "data",
-    "search"
-  ],
-  "tags": [
-    "north-cyprus",
-    "kktc",
-    "trnc",
-    "cyprus",
-    "mediterranean",
-    "property",
-    "real-estate",
-    "rental",
-    "investment",
-    "ai-native"
-  ],
-  "capabilities": {
-    "tools": {
-      "listChanged": false
-    },
-    "resources": false,
-    "prompts": false
-  },
-  "auth": {
-    "required": false,
-    "type": "none"
-  },
-  "rateLimits": {
-    "perIp": "60/min",
-    "global": "500/min",
-    "batchSize": 20
-  },
-  "tools": [
+  "remotes": [
     {
-      "name": "search_listings",
-      "title": "Search Northern Cyprus Property Listings",
-      "description": "Search live property listings on Evlek. Filter by city, type (sale/rent/daily), bedrooms, and price range. Returns up to 10 matching properties with title, price, location, and direct link."
-    },
-    {
-      "name": "get_price_index",
-      "title": "Get Northern Cyprus Price Index",
-      "description": "Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Useful for market analysis and investment decisions."
-    },
-    {
-      "name": "get_market_overview",
-      "title": "Get Northern Cyprus Market Overview",
-      "description": "Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules)."
-    },
-    {
-      "name": "compare_cities",
-      "title": "Compare Northern Cyprus Cities Side-by-Side",
-      "description": "Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Useful for deciding between investment locations."
-    },
-    {
-      "name": "get_yield_estimate",
-      "title": "Estimate Rental Yield for a Northern Cyprus Property",
-      "description": "Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages."
-    },
-    {
-      "name": "get_legal_info",
-      "title": "Get KKTC Property Legal Information",
-      "description": "Authoritative legal/procedural info on Northern Cyprus property topics: title deed types (koçan), foreign purchase rules, taxes, residence permits, and PTP (Permission to Purchase) process. Always recommend consulting a lawyer for specific cases."
-    },
-    {
-      "name": "suggest_neighborhood",
-      "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona",
-      "description": "Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale."
-    },
-    {
-      "name": "compare_properties",
-      "title": "Compare Evlek Property Listings Side-by-Side",
-      "description": "Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-m², location for each, plus an automatic value insight."
-    },
-    {
-      "name": "get_district_profile",
-      "title": "Get 360° Profile for a Northern Cyprus District",
-      "description": "Returns a comprehensive profile for a single district: active listing counts, average/median prices, £/m², bedroom breakdown, estimated gross yield, and matching buyer personas."
+      "type": "streamable-http",
+      "url": "https://evlek.app/api/mcp"
     }
   ],
-  "regions": [
-    "TRNC",
-    "Northern Cyprus",
-    "Mediterranean"
-  ],
-  "languages": [
-    "en",
-    "tr"
-  ],
-  "currencies": [
-    "GBP",
-    "TRY",
-    "USD",
-    "EUR"
-  ]
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "publisher": {
+        "name": "Evlek",
+        "url": "https://evlek.app",
+        "email": "hello@evlek.app"
+      },
+      "license": "MIT",
+      "homepage": "https://evlek.app",
+      "documentation": "https://evlek.app/mcp",
+      "protocolVersion": "2025-11-05",
+      "categories": [
+        "real-estate",
+        "property",
+        "data",
+        "search"
+      ],
+      "tags": [
+        "north-cyprus",
+        "kktc",
+        "trnc",
+        "cyprus",
+        "mediterranean",
+        "property",
+        "real-estate",
+        "rental",
+        "investment",
+        "ai-native"
+      ],
+      "capabilities": {
+        "tools": {
+          "listChanged": false
+        },
+        "resources": false,
+        "prompts": false
+      },
+      "auth": {
+        "required": false,
+        "type": "none"
+      },
+      "rateLimits": {
+        "perIp": "60/min",
+        "global": "500/min",
+        "batchSize": 20
+      },
+      "tools": [
+        {
+          "name": "search_listings",
+          "title": "Search Northern Cyprus Property Listings",
+          "description": "Search live property listings on Evlek. Filter by city, type (sale/rent/daily), bedrooms, and price range. Returns up to 10 matching properties with title, price, location, and direct link."
+        },
+        {
+          "name": "get_price_index",
+          "title": "Get Northern Cyprus Price Index",
+          "description": "Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Useful for market analysis and investment decisions."
+        },
+        {
+          "name": "get_market_overview",
+          "title": "Get Northern Cyprus Market Overview",
+          "description": "Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules)."
+        },
+        {
+          "name": "compare_cities",
+          "title": "Compare Northern Cyprus Cities Side-by-Side",
+          "description": "Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Useful for deciding between investment locations."
+        },
+        {
+          "name": "get_yield_estimate",
+          "title": "Estimate Rental Yield for a Northern Cyprus Property",
+          "description": "Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages."
+        },
+        {
+          "name": "get_legal_info",
+          "title": "Get KKTC Property Legal Information",
+          "description": "Authoritative legal/procedural info on Northern Cyprus property topics: title deed types (koÃ§an), foreign purchase rules, taxes, residence permits, and PTP (Permission to Purchase) process. Always recommend consulting a lawyer for specific cases."
+        },
+        {
+          "name": "suggest_neighborhood",
+          "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona",
+          "description": "Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale."
+        },
+        {
+          "name": "compare_properties",
+          "title": "Compare Evlek Property Listings Side-by-Side",
+          "description": "Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-mÂ², location for each, plus an automatic value insight."
+        },
+        {
+          "name": "get_district_profile",
+          "title": "Get 360Â° Profile for a Northern Cyprus District",
+          "description": "Returns a comprehensive profile for a single district: active listing counts, average/median prices, Â£/mÂ², bedroom breakdown, estimated gross yield, and matching buyer personas."
+        }
+      ],
+      "regions": [
+        "TRNC",
+        "Northern Cyprus",
+        "Mediterranean"
+      ],
+      "languages": [
+        "en",
+        "tr"
+      ],
+      "currencies": [
+        "GBP",
+        "TRY",
+        "USD",
+        "EUR"
+      ]
+    }
+  }
 }
