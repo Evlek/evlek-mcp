@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.evlek/mcp-server",
-  "title": "Evlek â€” Northern Cyprus Property MCP Server",
-  "description": "AI-native property MCP for Northern Cyprus (KKTC). 9 read-only tools, hosted, multilingual.",
-  "version": "1.2.1",
+  "title": "Evlek — Northern Cyprus Property MCP Server",
+  "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC). Public read-only Streamable HTTP server with 16 source-dated tools for listings, market data, legal routing, neighborhoods, student housing, payments, plus ChatGPT-compatible search/fetch.",
+  "version": "1.5.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
@@ -24,9 +24,10 @@
         "email": "hello@evlek.app"
       },
       "license": "MIT",
+      "licenseScope": "MIT covers this public repository's manifest, documentation, examples, and reference clients only. Hosted Evlek service, web/mobile apps, listing database, AI prompts, business logic, brand assets, name, logo, and trade dress are proprietary.",
       "homepage": "https://evlek.app",
       "documentation": "https://evlek.app/mcp",
-      "protocolVersion": "2025-11-05",
+      "protocolVersion": "2025-11-25",
       "categories": [
         "real-estate",
         "property",
@@ -49,8 +50,12 @@
         "tools": {
           "listChanged": false
         },
-        "resources": false,
-        "prompts": false
+        "resources": {
+          "listChanged": false
+        },
+        "prompts": {
+          "listChanged": false
+        }
       },
       "auth": {
         "required": false,
@@ -61,51 +66,84 @@
         "global": "500/min",
         "batchSize": 20
       },
+      "mobileApps": {
+        "ios": "https://apps.apple.com/app/id6760562764",
+        "android": "https://play.google.com/store/apps/details?id=app.evlek.mobile"
+      },
       "tools": [
         {
           "name": "search_listings",
-          "title": "Search Northern Cyprus Property Listings",
-          "description": "Search live property listings on Evlek. Filter by city, type (sale/rent/daily), bedrooms, and price range. Returns up to 10 matching properties with title, price, location, and direct link."
+          "title": "Search Northern Cyprus Property Listings"
         },
         {
           "name": "get_price_index",
-          "title": "Get Northern Cyprus Price Index",
-          "description": "Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Useful for market analysis and investment decisions."
+          "title": "Get Northern Cyprus Price Index"
         },
         {
           "name": "get_market_overview",
-          "title": "Get Northern Cyprus Market Overview",
-          "description": "Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules)."
+          "title": "Get Northern Cyprus Market Overview"
         },
         {
           "name": "compare_cities",
-          "title": "Compare Northern Cyprus Cities Side-by-Side",
-          "description": "Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Useful for deciding between investment locations."
+          "title": "Compare Northern Cyprus Cities Side-by-Side"
         },
         {
           "name": "get_yield_estimate",
-          "title": "Estimate Rental Yield for a Northern Cyprus Property",
-          "description": "Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages."
+          "title": "Estimate Rental Yield for a Northern Cyprus Property"
         },
         {
           "name": "get_legal_info",
-          "title": "Get KKTC Property Legal Information",
-          "description": "Authoritative legal/procedural info on Northern Cyprus property topics: title deed types (koÃ§an), foreign purchase rules, taxes, residence permits, and PTP (Permission to Purchase) process. Always recommend consulting a lawyer for specific cases."
+          "title": "Get KKTC Property Legal Information"
         },
         {
           "name": "suggest_neighborhood",
-          "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona",
-          "description": "Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale."
+          "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona"
         },
         {
           "name": "compare_properties",
-          "title": "Compare Evlek Property Listings Side-by-Side",
-          "description": "Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-mÂ², location for each, plus an automatic value insight."
+          "title": "Compare Evlek Property Listings Side-by-Side"
         },
         {
           "name": "get_district_profile",
-          "title": "Get 360Â° Profile for a Northern Cyprus District",
-          "description": "Returns a comprehensive profile for a single district: active listing counts, average/median prices, Â£/mÂ², bedroom breakdown, estimated gross yield, and matching buyer personas."
+          "title": "Get 360° Profile for a Northern Cyprus District"
+        },
+        {
+          "name": "assess_title_risk",
+          "title": "Assess KKTC Title-Deed (Koçan) Risk Band"
+        },
+        {
+          "name": "foreign_buyer_roadmap",
+          "title": "KKTC Foreign-Buyer Purchase Roadmap"
+        },
+        {
+          "name": "student_housing",
+          "title": "Student-Housing Rental Outlook near a KKTC University"
+        },
+        {
+          "name": "payment_plan",
+          "title": "KKTC Property Payment & Currency Breakdown"
+        },
+        {
+          "name": "get_listing_detail",
+          "title": "Get Full Detail for a Single Evlek Listing"
+        },
+        {
+          "name": "search",
+          "title": "Search Evlek property listings"
+        },
+        {
+          "name": "fetch",
+          "title": "Fetch full Evlek listing detail"
+        }
+      ],
+      "resourceTemplates": [
+        {
+          "uriTemplate": "evlek://price-index/{city}",
+          "name": "price-index"
+        },
+        {
+          "uriTemplate": "evlek://district/{city}/{district}",
+          "name": "district-profile"
         }
       ],
       "regions": [
@@ -115,7 +153,10 @@
       ],
       "languages": [
         "en",
-        "tr"
+        "tr",
+        "ru",
+        "de",
+        "ar"
       ],
       "currencies": [
         "GBP",
