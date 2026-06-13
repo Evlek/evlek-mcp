@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
-  "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC). Public read-only Streamable HTTP server with 16 source-dated tools for listings, market data, legal routing, neighborhoods, student housing, payments, plus ChatGPT-compatible search/fetch.",
+  "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC): listings, prices, legal, market data.",
   "version": "1.5.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
