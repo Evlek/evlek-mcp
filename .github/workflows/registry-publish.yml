@@ -1,0 +1,57 @@
+# Hedef konum (repo): Evlek/evlek-mcp  ->  .github/workflows/registry-publish.yml
+#
+# AMAÇ: Her "v*" tag push'unda Evlek MCP server'ı resmi MCP Registry'ye
+#       OTOMATİK yayınlar. Drift'in (v1.2 -> 1.4 -> 1.5 elle senkron) kalıcı çözümü.
+#
+# ÖNEMLİ KARAR — neden github-oidc DEĞİL, DNS:
+#   github-oidc login yalnızca "io.github.<owner>/..." namespace'li server
+#   adlarını doğrular. Evlek'in adı "app.evlek/mcp-server" (evlek.app reverse-DNS
+#   namespace'i) olduğu için OIDC YETMEZ -> DNS + Ed25519 auth ŞART.
+#   (Zaten mevcut publish de DNS auth + ed25519 keypair ile yapıldı.)
+#
+# MANUEL ÖN KOŞUL (Onur, kod dışı — Claude secret giremez):
+#   GitHub repo Evlek/evlek-mcp -> Settings -> Secrets and variables -> Actions
+#   "New repository secret":
+#     Name:  MCP_PRIVATE_KEY
+#     Value: <saklanan Ed25519 private key, 64-char hex seed>
+#   (Bu, ilk publish'te DNS auth için üretilip bir yere kaydedilen private key.)
+#
+# server.json: repo kökünde olmalı (mevcut repoda var). publish onu okur.
+
+name: Publish to MCP Registry
+
+on:
+  push:
+    tags: ["v*"]          # örn. v1.5.0, v1.6.0
+  workflow_dispatch: {}    # gerekirse elle tetikle
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Authenticate to MCP Registry (DNS, Ed25519)
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: ./mcp-publisher login dns --domain evlek.app --private-key "$MCP_PRIVATE_KEY"
+
+      # Tag'den sürümü server.json'a yaz (yalnızca v* tag push'unda çalışır).
+      # server.json sürümü elle tutuluyorsa bu adım tag ile hizalı tutar.
+      - name: Sync version from tag into server.json
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          if [ "$VERSION" != "$GITHUB_REF" ] && [ -n "$VERSION" ]; then
+            jq --arg v "$VERSION" '.version = $v' server.json > server.tmp && mv server.tmp server.json
+            echo "server.json version -> $VERSION"
+          else
+            echo "Tag yok (manuel tetik); server.json'daki mevcut sürüm kullanılacak."
+          fi
+
+      - name: Publish server to MCP Registry
+        run: ./mcp-publisher publish
