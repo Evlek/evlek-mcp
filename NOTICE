@@ -1,0 +1,23 @@
+NOTICE — Evlek MCP Server
+
+The MIT license in the LICENSE file applies ONLY to the contents of this public
+repository: the MCP Registry manifest (server.json), documentation (README.md,
+TOOLS.md), configuration examples, and reference clients.
+
+SCOPE OF THE MIT LICENSE
+The MIT license does NOT cover the hosted Evlek service. The following remain
+proprietary and are NOT licensed under MIT:
+- the evlek.app web application and its source code
+- the Evlek iOS and Android applications
+- the listing database and its contents
+- AI prompts, prompt engineering, and model configurations
+- business logic, ranking, and data pipelines
+- brand assets, design system, and trade dress
+
+TRADEMARK
+"Evlek" is a trademark of Onur Dokuzoğlu. The MIT license grants no rights to
+use the "Evlek" name, logo, branding, or trade dress. For brand or trademark
+usage requests, contact: hello@evlek.app
+
+CONTACT
+hello@evlek.app https://evlek.app
