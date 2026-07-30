@@ -1,5 +1,5 @@
 # Evlek MCP — Tool Reference
-Full input schemas for all 16 tools in **v1.5.0** (protocol `2025-11-25`). Generated from the live `tools/list` response.
+Full input schemas for all 18 tools in **v1.6.0** (protocol `2026-07-28`). Generated from the live `tools/list` response.
 
 > **Caveats:** `get_legal_info`, `assess_title_risk`, `foreign_buyer_roadmap` are general legal/procedural routing — **not legal advice**. `get_yield_estimate`, `payment_plan` are estimates on source-dated data — **not financial advice**.
 
@@ -1078,6 +1078,57 @@ Fetch the full detail of one Evlek listing by id (from search): title, descripti
       "type": "object"
     }
   }
+}
+```
+
+---
+
+## 17. `list_locations`
+
+**List Valid Evlek Cities and Districts**
+
+Return the canonical list of valid KKTC city slugs plus the districts that currently have active Evlek listings. Call this first when unsure about exact city/district spelling — search_listings, compare_cities, and get_district_profile all reject unrecognized city values.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "city": {
+      "type": "string",
+      "enum": [
+        "girne",
+        "iskele",
+        "lefkosa",
+        "gazimagusa",
+        "guzelyurt",
+        "lefke"
+      ],
+      "description": "Optional — limit districts to a single city slug."
+    }
+  }
+}
+```
+
+---
+
+## 18. `get_listing_by_number`
+
+**Get Evlek Listing by Number**
+
+Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" or "123456") and return its full detail — same shape as get_listing_detail. Use this when a listing number is known (site/card reference) instead of a UUID.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "listing_number": {
+      "type": "string",
+      "description": "Evlek listing number, e.g. \"EVL-123456\" or \"123456\"."
+    }
+  },
+  "required": [
+    "listing_number"
+  ]
 }
 ```
 

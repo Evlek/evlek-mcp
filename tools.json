@@ -1,0 +1,1220 @@
+{
+  "generatedFrom": "https://evlek.app/api/mcp tools/list",
+  "protocolVersion": "2026-07-28",
+  "tools": [
+    {
+      "name": "search_listings",
+      "title": "Search Northern Cyprus Property Listings",
+      "description": "Search live property listings on Evlek. Filter by city, type (sale/rent/daily), bedrooms, and price range. Returns up to 10 matching properties with title, price, location, and direct link.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "girne",
+              "iskele",
+              "lefkosa",
+              "gazimagusa",
+              "guzelyurt",
+              "lefke"
+            ],
+            "description": "City to filter"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sale",
+              "rent",
+              "daily"
+            ],
+            "description": "Listing type"
+          },
+          "bedrooms": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Bedroom count (integer 0-10)"
+          },
+          "minPrice": {
+            "type": "number",
+            "description": "Min price in GBP"
+          },
+          "maxPrice": {
+            "type": "number",
+            "description": "Max price in GBP"
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Result count (integer 1-10, default 5)"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "listings": {
+            "type": "array"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_price_index",
+      "title": "Get Northern Cyprus Price Index",
+      "description": "Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Useful for market analysis and investment decisions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "girne",
+              "iskele",
+              "lefkosa",
+              "gazimagusa",
+              "guzelyurt",
+              "lefke"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sale",
+              "rent"
+            ],
+            "description": "Sale or rent (default: sale)"
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "generatedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "totalListings": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cities": {
+            "type": "array"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_market_overview",
+      "title": "Get Northern Cyprus Market Overview",
+      "description": "Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "lastUpdated": {
+            "type": "string"
+          },
+          "indexes": {
+            "type": "object"
+          },
+          "investmentHighlights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "compare_cities",
+      "title": "Compare Northern Cyprus Cities Side-by-Side",
+      "description": "Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Useful for deciding between investment locations.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "girne",
+                "iskele",
+                "lefkosa",
+                "gazimagusa",
+                "guzelyurt",
+                "lefke"
+              ]
+            },
+            "description": "Cities to compare (2-4)"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "sale",
+              "rent"
+            ],
+            "description": "Sale or rent (default: sale)"
+          }
+        },
+        "required": [
+          "cities"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "generatedAt": {
+            "type": "string"
+          },
+          "cities": {
+            "type": "array"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_yield_estimate",
+      "title": "Estimate Rental Yield for a Northern Cyprus Property",
+      "description": "Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "girne",
+              "iskele",
+              "lefkosa",
+              "gazimagusa",
+              "guzelyurt",
+              "lefke"
+            ]
+          },
+          "purchasePrice": {
+            "type": "number",
+            "description": "Purchase price in GBP",
+            "minimum": 10000,
+            "maximum": 10000000
+          },
+          "bedrooms": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Bedroom count (integer 0-10)"
+          }
+        },
+        "required": [
+          "city",
+          "purchasePrice"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "purchasePriceGBP": {
+            "type": "number"
+          },
+          "monthlyRentGBP": {
+            "type": "number"
+          },
+          "grossAnnualGBP": {
+            "type": "number"
+          },
+          "grossYieldPct": {
+            "type": "number"
+          },
+          "netAnnualGBP": {
+            "type": "number"
+          },
+          "netYieldPct": {
+            "type": "number"
+          },
+          "breakevenYears": {
+            "type": "number"
+          },
+          "cityBenchmark": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dataSource": {
+            "type": "string",
+            "description": "modelled — not derived from live rental listings"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_legal_info",
+      "title": "Get KKTC Property Legal Information",
+      "description": "General legal/procedural routing for Northern Cyprus property topics: title deed types (koçan), foreign purchase rules, taxes, residency context, and PTP (Permission to Purchase) process. Always recommend consulting a lawyer for specific cases.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "enum": [
+              "kocan_types",
+              "foreign_purchase",
+              "tax_overview",
+              "residence_permit",
+              "ptp_process"
+            ],
+            "description": "Legal topic to retrieve"
+          }
+        },
+        "required": [
+          "topic"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "suggest_neighborhood",
+      "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona",
+      "description": "Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale. Based on Evlek expert knowledge of KKTC regional characteristics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "persona": {
+            "type": "string",
+            "enum": [
+              "retiree",
+              "investor",
+              "student",
+              "family",
+              "digital_nomad",
+              "vacation"
+            ]
+          },
+          "budgetGBP": {
+            "type": "number",
+            "minimum": 20000,
+            "maximum": 5000000
+          },
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "beach",
+                "city_center",
+                "quiet",
+                "social",
+                "schools",
+                "nature",
+                "halal"
+              ]
+            }
+          }
+        },
+        "required": [
+          "persona"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "persona": {
+            "type": "string"
+          },
+          "budgetGBP": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "preferences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "suggestions": {
+            "type": "array"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "compare_properties",
+      "title": "Compare Evlek Property Listings Side-by-Side",
+      "description": "Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-m², location for each, plus an automatic value insight (cheapest £/m², largest area, same-city grouping). Pass UUIDs from search_listings results.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "listing_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Evlek listing UUID"
+            },
+            "description": "Evlek listing UUIDs (2-4)"
+          }
+        },
+        "required": [
+          "listing_ids"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "number"
+          },
+          "missing": {
+            "type": "number"
+          },
+          "listings": {
+            "type": "array"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_district_profile",
+      "title": "Get 360° Profile for a Northern Cyprus District",
+      "description": "Returns a comprehensive profile for a single district: active listing counts (sale & rent), average/median prices, £/m², bedroom breakdown, estimated gross yield (rent/sale ratio), and matching buyer personas (retiree, investor, student, family, digital_nomad, vacation). Use after compare_cities narrows the city.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "girne",
+              "iskele",
+              "lefkosa",
+              "gazimagusa",
+              "guzelyurt",
+              "lefke"
+            ]
+          },
+          "district": {
+            "type": "string",
+            "description": "District name (2-60 chars)"
+          }
+        },
+        "required": [
+          "city",
+          "district"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "totalActive": {
+            "type": "number"
+          },
+          "sale": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "rent": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "grossYieldPct": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "personas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "assess_title_risk",
+      "title": "Assess KKTC Title-Deed (Koçan) Risk Band",
+      "description": "Given a KKTC title-deed (koçan) type, return a neutral risk BAND, framing notes, and verification steps. General information only — every result carries a disclaimer and recommends an independent KKTC lawyer plus a Land Registry title check. Not legal advice.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title_deed_type": {
+            "type": "string",
+            "enum": [
+              "turk_kocan",
+              "esdeger_kocan",
+              "tahsis",
+              "foreign_title",
+              "kat_irtifak",
+              "unknown"
+            ],
+            "description": "KKTC koçan type: turk_kocan, esdeger_kocan, tahsis, foreign_title, kat_irtifak, or unknown (legacy turkish/equivalent/allocation/foreign accepted)."
+          }
+        },
+        "required": [
+          "title_deed_type"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "kocanType": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "band": {
+            "type": "string"
+          },
+          "bandDescription": {
+            "type": "string"
+          },
+          "framing": {
+            "type": "string"
+          },
+          "verifySteps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "legalAuditStatus": {
+            "type": "string"
+          },
+          "disclaimer": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "foreign_buyer_roadmap",
+      "title": "KKTC Foreign-Buyer Purchase Roadmap (deprecated)",
+      "description": "DEPRECATED — alias of get_legal_info(topic: 'ptp_process'); will be removed after 2027-07-30, use get_legal_info directly. Step-by-step roadmap for a foreign national buying property in Northern Cyprus (KKTC), including the Permission to Purchase (PTP) process. General information only — confirm current rules with an independent KKTC lawyer. Not legal advice.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "student_housing",
+      "title": "Student-Housing Rental Outlook near a KKTC University",
+      "description": "Given a Northern Cyprus university (resolved from the live Evlek roster), estimate student-rental monthly rent and academic-year (9-month) vs year-round (12-month) gross income/yield, with the city yield band and a link to nearby listings. Estimates only — not financial advice.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "university": {
+            "type": "string",
+            "description": "University name, short code, or known alias, matched against the canonical Evlek university catalog."
+          },
+          "purchasePrice": {
+            "type": "number",
+            "minimum": 10000,
+            "maximum": 10000000,
+            "description": "Optional purchase price in GBP (enables yield)."
+          },
+          "bedrooms": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Bedroom count (0=studio)."
+          }
+        },
+        "required": [
+          "university"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "university": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "monthlyRentGBP": {
+            "type": "number"
+          },
+          "academicAnnualGBP": {
+            "type": "number"
+          },
+          "yearRoundAnnualGBP": {
+            "type": "number"
+          },
+          "academicYieldPct": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "yearRoundYieldPct": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cityBand": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dataSource": {
+            "type": "string",
+            "description": "modelled — not derived from live rental listings"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "payment_plan",
+      "title": "KKTC Property Payment & Currency Breakdown",
+      "description": "Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live, date-stamped exchange rates (base GBP), and surface off-plan staged-payment risk warnings. General information only — confirm escrow, milestones and title transfer with an independent KKTC lawyer.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number",
+            "minimum": 1000,
+            "maximum": 100000000,
+            "description": "Property price."
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "GBP",
+              "EUR",
+              "USD",
+              "TRY"
+            ],
+            "description": "Currency of the price (default GBP)."
+          },
+          "offPlan": {
+            "type": "boolean",
+            "description": "True if off-plan (under construction)."
+          }
+        },
+        "required": [
+          "price"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "inputCurrency": {
+            "type": "string"
+          },
+          "priceGBP": {
+            "type": "number"
+          },
+          "amounts": {
+            "type": "object"
+          },
+          "fx": {
+            "type": "object"
+          },
+          "offPlan": {
+            "type": "boolean"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_listing_detail",
+      "title": "Get Full Detail for a Single Evlek Listing",
+      "description": "Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions and tags, and title-deed (koçan) type with its risk band. Contact details are intentionally omitted. Pass a UUID from search_listings.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "property_id": {
+            "type": "string",
+            "description": "Evlek listing UUID"
+          }
+        },
+        "required": [
+          "property_id"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "found": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "listingNumber": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bedrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "bathrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "areaSqm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "priceGbp": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pricePerSqmGBP": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "listedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "furnished": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "titleDeedType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "titleDeedLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "titleDeedBand": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amenities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "photoCount": {
+            "type": "number"
+          },
+          "coverImageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "search",
+      "title": "Search Evlek property listings",
+      "description": "Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query (city, sale/rent, bedrooms). Returns matching listings as id/title/url for the fetch tool. Read-only; no contact details. Same underlying data as search_listings — this fixed single-query-string form exists for the ChatGPT/OpenAI connector contract; prefer search_listings directly for structured filters (price range, exact bedroom count).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Free-text property search query"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "fetch",
+      "title": "Fetch full Evlek listing detail",
+      "description": "Fetch the full detail of one Evlek listing by id (from search): title, description, GBP-normalized price, location, size, amenities. Read-only; contact details intentionally omitted. Same underlying data as get_listing_detail — this fixed id-only form exists for the ChatGPT/OpenAI connector contract; prefer get_listing_detail directly outside that connector.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Evlek listing id (UUID) from search"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "list_locations",
+      "title": "List Valid Evlek Cities and Districts",
+      "description": "Return the canonical list of valid KKTC city slugs plus the districts that currently have active Evlek listings. Call this first when unsure about exact city/district spelling — search_listings, compare_cities, and get_district_profile all reject unrecognized city values.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "enum": [
+              "girne",
+              "iskele",
+              "lefkosa",
+              "gazimagusa",
+              "guzelyurt",
+              "lefke"
+            ],
+            "description": "Optional — limit districts to a single city slug."
+          }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string"
+                },
+                "display": {
+                  "type": "string"
+                },
+                "districtCount": {
+                  "type": "number"
+                },
+                "districts": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "get_listing_by_number",
+      "title": "Get Evlek Listing by Number",
+      "description": "Look up a single Evlek listing by its public listing number (e.g. \"EVL-123456\" or \"123456\") and return its full detail — same shape as get_listing_detail. Use this when a listing number is known (site/card reference) instead of a UUID.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "listing_number": {
+            "type": "string",
+            "description": "Evlek listing number, e.g. \"EVL-123456\" or \"123456\"."
+          }
+        },
+        "required": [
+          "listing_number"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "found": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "listingNumber": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "bedrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "bathrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "areaSqm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "priceGbp": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "pricePerSqmGBP": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "listedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "furnished": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "titleDeedType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "titleDeedLabel": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "titleDeedBand": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amenities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "photoCount": {
+            "type": "number"
+          },
+          "coverImageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "openWorldHint": true
+      }
+    }
+  ]
+}
