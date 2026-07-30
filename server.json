@@ -3,7 +3,7 @@
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
   "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC): listings, prices, legal, market data.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
@@ -27,7 +27,7 @@
       "licenseScope": "MIT covers this public repository's manifest, documentation, examples, and reference clients only. Hosted Evlek service, web/mobile apps, listing database, AI prompts, business logic, brand assets, name, logo, and trade dress are proprietary.",
       "homepage": "https://evlek.app",
       "documentation": "https://evlek.app/mcp",
-      "protocolVersion": "2025-11-25",
+      "protocolVersion": "2026-07-28",
       "categories": [
         "real-estate",
         "property",

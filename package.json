@@ -1,0 +1,45 @@
+{
+  "name": "evlek-mcp",
+  "version": "1.6.0",
+  "description": "Evlek — Northern Cyprus (KKTC/TRNC) property MCP server. Local stdio server backed by the live Evlek data API.",
+  "type": "module",
+  "bin": {
+    "evlek-mcp": "src/index.js"
+  },
+  "main": "src/index.js",
+  "files": [
+    "src/",
+    "tools.json",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "start": "node src/index.js",
+    "sync-tools": "node scripts/sync-tools.mjs",
+    "test": "node scripts/smoke-test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "property",
+    "listings",
+    "north-cyprus",
+    "kktc",
+    "trnc",
+    "evlek"
+  ],
+  "author": "Evlek <hello@evlek.app> (https://evlek.app)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evlek/evlek-mcp.git"
+  },
+  "homepage": "https://evlek.app/mcp"
+}

@@ -1,6 +1,6 @@
 # Evlek MCP Server
 
-[![MCP](https://img.shields.io/badge/MCP-2025--11--25-7B61FF?style=flat-square)](https://modelcontextprotocol.io)
+[![MCP](https://img.shields.io/badge/MCP-2026--07--28-7B61FF?style=flat-square)](https://modelcontextprotocol.io)
 [![Hosted](https://img.shields.io/badge/Hosted-evlek.app-0A2540?style=flat-square)](https://evlek.app/api/mcp)
 [![License](https://img.shields.io/badge/License-MIT-2D8B5C?style=flat-square)](LICENSE)
 [![Coverage](https://img.shields.io/badge/Coverage-North_Cyprus-C9A157?style=flat-square)](https://evlek.app)
@@ -81,7 +81,33 @@ More configs: [`examples/`](./examples/)
 
 ---
 
-## Available tools (v1.5.0 — 16 tools)
+### Local stdio server (this repository)
+
+This repo is also a runnable MCP server. It answers `initialize` / `tools/list` entirely locally from the embedded tool contract ([`tools.json`](./tools.json)) and fetches live data from the Evlek data API when a tool is called:
+
+```bash
+npx github:Evlek/evlek-mcp        # or: npm install && npm start
+```
+
+```json
+{
+  "mcpServers": {
+    "evlek": {
+      "command": "npx",
+      "args": ["-y", "github:Evlek/evlek-mcp"]
+    }
+  }
+}
+```
+
+Smoke-test it (spawns the server and speaks real MCP over stdio):
+
+```bash
+npm test              # live: initialize + tools/list + a real tools/call
+OFFLINE=1 npm test    # offline: introspection works with zero network
+```
+
+## Available tools (v1.6.0 — 18 tools)
 
 | # | Tool | What it does |
 |---|------|--------------|
@@ -101,6 +127,8 @@ More configs: [`examples/`](./examples/)
 | 14 | `get_listing_detail` | 360° profile of one active listing by UUID, including GBP-normalized price-per-m². |
 | 15 | `search` | **(ChatGPT-compatible)** Free-text search returning listings as `{id, title, url}`. |
 | 16 | `fetch` | **(ChatGPT-compatible)** Fetch full listing detail by id from `search`. |
+| 17 | `list_locations` | Valid city + district dictionary — call first when unsure of location names. |
+| 18 | `get_listing_by_number` | Look up a listing by its `EVL-XXXXXX` listing number. |
 
 See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and response examples.
 
@@ -139,7 +167,7 @@ Read-only `evlek://` data via `resources/list` / `resources/read`, plus paramete
 
 ## Architecture
 
-The Evlek MCP server runs as a hosted endpoint at `https://evlek.app/api/mcp`. It speaks the Model Context Protocol over Streamable HTTP (JSON-RPC 2.0), `protocolVersion 2025-11-25`, and exposes tools, resources, resource templates, and prompts. Discovery metadata is published at [`/.well-known/mcp.json`](https://evlek.app/.well-known/mcp.json).
+The Evlek MCP server runs as a hosted endpoint at `https://evlek.app/api/mcp`. It speaks the Model Context Protocol over Streamable HTTP (JSON-RPC 2.0), `protocolVersion 2026-07-28`, and exposes tools, resources, resource templates, and prompts. Discovery metadata is published at [`/.well-known/mcp.json`](https://evlek.app/.well-known/mcp.json).
 
 This repository contains:
 
@@ -160,9 +188,9 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 1.5.0 (live)
-- **Protocol:** 2025-11-25
-- **Primitives:** 16 tools · 8 resources · 2 resource templates · 4 prompts
+- **MCP version:** 1.6.0 (live)
+- **Protocol:** 2026-07-28
+- **Primitives:** 18 tools · 8 resources · 2 resource templates · 4 prompts
 - **Auth:** none (public read-only)
 - **Endpoint:** `https://evlek.app/api/mcp`
 - **MCP Registry:** [`app.evlek/mcp-server`](https://registry.modelcontextprotocol.io)
