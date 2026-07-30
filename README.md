@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-2D8B5C?style=flat-square)](LICENSE)
 [![Coverage](https://img.shields.io/badge/Coverage-North_Cyprus-C9A157?style=flat-square)](https://evlek.app)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-app.evlek-B84E3B?style=flat-square)](https://registry.modelcontextprotocol.io)
+[![smithery badge](https://smithery.ai/badge/onurd8898/evlek)](https://smithery.ai/servers/onurd8898/evlek)
 
 > AI-native property discovery for North Cyprus (KKTC). Built on the Model Context Protocol — works in Claude, ChatGPT, Gemini, Cursor, and any MCP-compatible client.
 
