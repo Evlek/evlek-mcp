@@ -9,7 +9,7 @@
 
 > AI-native property discovery for North Cyprus (KKTC). Built on the Model Context Protocol — works in Claude, ChatGPT, Gemini, Cursor, and any MCP-compatible client.
 
-The Evlek MCP server gives AI agents structured, real-time access to North Cyprus property data — search active listings, compare cities, estimate rental yield, look up KKTC legal procedures, get district profiles, and more. All data is sourced live from [evlek.app](https://evlek.app).
+The Evlek MCP server gives AI agents structured, real-time access to North Cyprus property data — search active listings, compare cities and districts, track the price index, and estimate rental yield. All data is sourced live from [evlek.app](https://evlek.app). Title-deed (koçan) and legal-procedure tools are deliberately **not** part of the surface: that taxonomy has not passed an independent KKTC legal audit.
 
 ## License scope
 
@@ -108,41 +108,38 @@ npm test              # live: initialize + tools/list + a real tools/call
 OFFLINE=1 npm test    # offline: introspection works with zero network
 ```
 
-## Available tools (v1.6.0 — 18 tools)
+## Available tools (v1.7.0 — 15 tools)
 
 | # | Tool | What it does |
 |---|------|--------------|
 | 1 | `search_listings` | Search active listings by city, type (sale/rent/daily), bedrooms, and GBP price range (normalized server-side). Up to 10 results with title, price, location, direct link. |
-| 2 | `get_price_index` | Aggregated avg/median/min/max prices per city + top districts (Evlek Price Index). |
-| 3 | `get_market_overview` | High-level market overview — avg rent/sale prices, rental yields, investment highlights, key facts. |
+| 2 | `get_price_index` | Aggregated avg/median/min/max prices per city + top districts (Evlek Price Index), with IQR outlier exclusion and a minimum-sample floor. |
+| 3 | `get_market_overview` | High-level market overview — indicative city rent/sale levels, yield ranges, and routing to Evlek's calculators. |
 | 4 | `compare_cities` | Compare 2-4 cities side-by-side with prices, listing counts, top districts, automatic verdict. |
 | 5 | `get_yield_estimate` | Estimate gross/net annual rental yield + breakeven years. Cities without sufficient data return a clear unsupported message. |
-| 6 | `get_legal_info` | General legal/procedural routing for koçan types, foreign purchase rules, taxes, residency, PTP. Not legal advice. |
-| 7 | `suggest_neighborhood` | Match a buyer persona (retiree, investor, student, family, digital_nomad, vacation) to neighborhoods. |
-| 8 | `compare_properties` | Compare 2-4 active listing UUIDs side-by-side with GBP price-per-m², area, bedrooms, value insight. |
-| 9 | `get_district_profile` | 360° district profile — sale/rent stats, £/m², bedroom breakdown, estimated yield, persona match. |
-| 10 | `assess_title_risk` | Neutral risk band for a KKTC koçan type with verification steps. Not legal advice. |
-| 11 | `foreign_buyer_roadmap` | Step-by-step KKTC foreign-buyer roadmap (PTP process). General information only. |
-| 12 | `student_housing` | Student-housing rental outlook near a KKTC university, academic-year vs year-round. |
-| 13 | `payment_plan` | Convert a price across GBP/EUR/USD/TRY using live date-stamped rates; off-plan staged-payment context. |
-| 14 | `get_listing_detail` | 360° profile of one active listing by UUID, including GBP-normalized price-per-m². |
-| 15 | `search` | **(ChatGPT-compatible)** Free-text search returning listings as `{id, title, url}`. |
-| 16 | `fetch` | **(ChatGPT-compatible)** Fetch full listing detail by id from `search`. |
-| 17 | `list_locations` | Valid city + district dictionary — call first when unsure of location names. |
-| 18 | `get_listing_by_number` | Look up a listing by its `EVL-XXXXXX` listing number. |
+| 6 | `suggest_neighborhood` | Match a buyer persona (retiree, investor, student, family, digital_nomad, vacation) to neighborhoods. |
+| 7 | `compare_properties` | Compare 2-4 active listing UUIDs side-by-side with GBP price-per-m², area, bedrooms, value insight. Mixed sale/rent/daily IDs are rejected — those prices are not comparable. |
+| 8 | `get_district_profile` | 360° district profile — sale/rent stats, £/m², bedroom breakdown, estimated yield, persona match. Same outlier filter and sample floor as the price index. |
+| 9 | `student_housing` | Student-housing rental outlook near a KKTC university, academic-year vs year-round. |
+| 10 | `payment_plan` | Convert a price across GBP/EUR/USD/TRY using live date-stamped rates; off-plan staged-payment context. |
+| 11 | `get_listing_detail` | 360° profile of one active listing by UUID, including GBP-normalized price-per-m². |
+| 12 | `search` | **(ChatGPT-compatible)** Free-text search returning listings as `{id, title, url}`. Understands city, type, bedroom and GBP price constraints in the query. |
+| 13 | `fetch` | **(ChatGPT-compatible)** Fetch full listing detail by id from `search`. |
+| 14 | `list_locations` | Valid city + district dictionary — call first when unsure of location names. |
+| 15 | `get_listing_by_number` | Look up a listing by its `EVL-XXXXXX` listing number. |
 
 See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and response examples.
 
-### Resources (8) & resource templates (2)
+### Resources (7) & resource templates (2)
 
 Read-only `evlek://` data via `resources/list` / `resources/read`, plus parameterized templates via `resources/templates/list`:
 
 - **Templates:** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
-- **Instances:** `evlek://legal/kocan-types`, per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), and a sample district profile.
+- **Instances:** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke) and a sample district profile.
 
-### Prompts (4)
+### Prompts (2)
 
-- `investment_analysis` · `kocan_risk_check` · `student_rental_outlook` · `foreign_buyer_guide`
+- `investment_analysis` · `student_rental_outlook`
 
 ---
 
@@ -151,9 +148,9 @@ Read-only `evlek://` data via `resources/list` / `resources/read`, plus paramete
 - *"Find 2-bedroom flats for rent in Girne under £500/month."*
 - *"What's the median sale price per square meter in Lefkoşa?"*
 - *"Compare İskele and Famagusta for investment — which has higher rental yield?"*
-- *"What koçan type is safest for a foreign buyer in North Cyprus?"*
 - *"Estimate the rental yield on a £150,000 2+1 in Girne."*
-- *"Walk me through the foreign-buyer purchase process in KKTC."*
+- *"Show me apartments in Girne under £150,000."*
+- *"What does a district profile for Alsancak look like?"*
 
 ---
 
@@ -189,9 +186,9 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 1.6.0 (live)
+- **MCP version:** 1.7.0 (live)
 - **Protocol:** 2026-07-28
-- **Primitives:** 18 tools · 8 resources · 2 resource templates · 4 prompts
+- **Primitives:** 15 tools · 7 resources · 2 resource templates · 2 prompts
 - **Auth:** none (public read-only)
 - **Endpoint:** `https://evlek.app/api/mcp`
 - **MCP Registry:** [`app.evlek/mcp-server`](https://registry.modelcontextprotocol.io)

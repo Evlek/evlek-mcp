@@ -297,43 +297,6 @@
       }
     },
     {
-      "name": "get_legal_info",
-      "title": "Get KKTC Property Legal Information",
-      "description": "General legal/procedural routing for Northern Cyprus property topics: title deed types (koçan), foreign purchase rules, taxes, residency context, and PTP (Permission to Purchase) process. Always recommend consulting a lawyer for specific cases.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "topic": {
-            "type": "string",
-            "enum": [
-              "kocan_types",
-              "foreign_purchase",
-              "tax_overview",
-              "residence_permit",
-              "ptp_process"
-            ],
-            "description": "Legal topic to retrieve"
-          }
-        },
-        "required": [
-          "topic"
-        ]
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "topic": {
-            "type": "string"
-          }
-        }
-      },
-      "annotations": {
-        "readOnlyHint": true,
-        "destructiveHint": false,
-        "openWorldHint": true
-      }
-    },
-    {
       "name": "suggest_neighborhood",
       "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona",
       "description": "Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale. Based on Evlek expert knowledge of KKTC regional characteristics.",
@@ -518,90 +481,6 @@
       }
     },
     {
-      "name": "assess_title_risk",
-      "title": "Assess KKTC Title-Deed (Koçan) Risk Band",
-      "description": "Given a KKTC title-deed (koçan) type, return a neutral risk BAND, framing notes, and verification steps. General information only — every result carries a disclaimer and recommends an independent KKTC lawyer plus a Land Registry title check. Not legal advice.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "title_deed_type": {
-            "type": "string",
-            "enum": [
-              "turk_kocan",
-              "esdeger_kocan",
-              "tahsis",
-              "foreign_title",
-              "kat_irtifak",
-              "unknown"
-            ],
-            "description": "KKTC koçan type: turk_kocan, esdeger_kocan, tahsis, foreign_title, kat_irtifak, or unknown (legacy turkish/equivalent/allocation/foreign accepted)."
-          }
-        },
-        "required": [
-          "title_deed_type"
-        ]
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "kocanType": {
-            "type": "string"
-          },
-          "label": {
-            "type": "string"
-          },
-          "band": {
-            "type": "string"
-          },
-          "bandDescription": {
-            "type": "string"
-          },
-          "framing": {
-            "type": "string"
-          },
-          "verifySteps": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "legalAuditStatus": {
-            "type": "string"
-          },
-          "disclaimer": {
-            "type": "string"
-          }
-        }
-      },
-      "annotations": {
-        "readOnlyHint": true,
-        "destructiveHint": false,
-        "openWorldHint": true
-      }
-    },
-    {
-      "name": "foreign_buyer_roadmap",
-      "title": "KKTC Foreign-Buyer Purchase Roadmap (deprecated)",
-      "description": "DEPRECATED — alias of get_legal_info(topic: 'ptp_process'); will be removed after 2027-07-30, use get_legal_info directly. Step-by-step roadmap for a foreign national buying property in Northern Cyprus (KKTC), including the Permission to Purchase (PTP) process. General information only — confirm current rules with an independent KKTC lawyer. Not legal advice.",
-      "inputSchema": {
-        "type": "object",
-        "properties": {}
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "topic": {
-            "type": "string"
-          }
-        }
-      },
-      "annotations": {
-        "readOnlyHint": true,
-        "destructiveHint": false,
-        "openWorldHint": true
-      }
-    },
-    {
       "name": "student_housing",
       "title": "Student-Housing Rental Outlook near a KKTC University",
       "description": "Given a Northern Cyprus university (resolved from the live Evlek roster), estimate student-rental monthly rent and academic-year (9-month) vs year-round (12-month) gross income/yield, with the city yield band and a link to nearby listings. Estimates only — not financial advice.",
@@ -744,7 +623,7 @@
     {
       "name": "get_listing_detail",
       "title": "Get Full Detail for a Single Evlek Listing",
-      "description": "Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions and tags, and title-deed (koçan) type with its risk band. Contact details are intentionally omitted. Pass a UUID from search_listings.",
+      "description": "Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, and per-photo captions and tags. Contact details are intentionally omitted. Pass a UUID from search_listings.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -832,24 +711,6 @@
           "furnished": {
             "type": [
               "boolean",
-              "null"
-            ]
-          },
-          "titleDeedType": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "titleDeedLabel": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "titleDeedBand": {
-            "type": [
-              "string",
               "null"
             ]
           },
@@ -1140,24 +1001,6 @@
           "furnished": {
             "type": [
               "boolean",
-              "null"
-            ]
-          },
-          "titleDeedType": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "titleDeedLabel": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "titleDeedBand": {
-            "type": [
-              "string",
               "null"
             ]
           },

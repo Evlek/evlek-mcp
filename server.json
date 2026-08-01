@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
-  "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC): listings, prices, legal, market data.",
-  "version": "1.6.0",
+  "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC): live listings, price index, city/district comparison, rental yield and market data.",
+  "version": "1.7.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
@@ -92,10 +92,6 @@
           "title": "Estimate Rental Yield for a Northern Cyprus Property"
         },
         {
-          "name": "get_legal_info",
-          "title": "Get KKTC Property Legal Information"
-        },
-        {
           "name": "suggest_neighborhood",
           "title": "Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona"
         },
@@ -106,14 +102,6 @@
         {
           "name": "get_district_profile",
           "title": "Get 360° Profile for a Northern Cyprus District"
-        },
-        {
-          "name": "assess_title_risk",
-          "title": "Assess KKTC Title-Deed (Koçan) Risk Band"
-        },
-        {
-          "name": "foreign_buyer_roadmap",
-          "title": "KKTC Foreign-Buyer Purchase Roadmap"
         },
         {
           "name": "student_housing",
@@ -134,6 +122,14 @@
         {
           "name": "fetch",
           "title": "Fetch full Evlek listing detail"
+        },
+        {
+          "name": "list_locations",
+          "title": "List Valid Evlek Cities and Districts"
+        },
+        {
+          "name": "get_listing_by_number",
+          "title": "Get Evlek Listing by Number"
         }
       ],
       "resourceTemplates": [

@@ -3,6 +3,7 @@
 // speaks real MCP over stdin/stdout — initialize, tools/list, one offline
 // failure path, and (unless OFFLINE=1) one live tools/call.
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const OFFLINE = process.env.OFFLINE === '1';
 const child = spawn('node', [new URL('../src/index.js', import.meta.url).pathname], {
@@ -52,7 +53,16 @@ check('initialize', !!init.result?.serverInfo, init.result?.serverInfo?.name);
 
 const list = await rpc('tools/list', {});
 const tools = list.result?.tools ?? [];
-check('tools/list count', tools.length === 18, `${tools.length} tools`);
+// Assert against the embedded contract rather than a hardcoded number — the
+// hosted surface changes (18 → 15 in PR-E) and a literal here just goes stale.
+const embeddedToolCount = JSON.parse(
+    readFileSync(new URL('../tools.json', import.meta.url), 'utf8')
+).tools.length;
+check(
+    'tools/list count',
+    tools.length === embeddedToolCount,
+    `${tools.length} tools (tools.json: ${embeddedToolCount})`
+);
 check(
     'tools/list annotations',
     tools.every((t) => t.annotations?.readOnlyHint === true),
