@@ -135,9 +135,9 @@ Three tools additionally ship a sandboxed HTML view that MCP Apps-capable hosts
 
 | Tool | Widget | What you get |
 |---|---|---|
-| `search_listings`, `search` | `ui://evlek/listing-cards-v2.html` | Card grid with cover photos; per-card drill-down into the detail view without leaving the widget |
+| `search_listings`, `search` | `ui://evlek/listing-cards-v2.html` | Horizontal scrolling card carousel (cover photo, price, location — height independent of result count); a card's CTA opens the full detail view in fullscreen, and 2-4 cards can be selected for a fullscreen side-by-side comparison |
 | `get_listing_detail` | `ui://evlek/listing-detail-v2.html` | Photo gallery with AI captions, spec sheet, and a before/after AI virtual-staging comparison slider |
-| `get_price_index` | `ui://evlek/price-index-v2.html` | District bar chart with explicit sample-size confidence tiers |
+| `get_price_index` | `ui://evlek/price-index-v2.html` | District bar chart with explicit sample-size confidence tiers; a district/city is a fullscreen continuation into matching listings or a city comparison |
 
 Views are static, self-contained HTML — no bundler, no third-party JS. Listing
 data reaches them only at runtime over `postMessage` and is written with
