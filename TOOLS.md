@@ -1,5 +1,5 @@
 # Evlek MCP — Tool Reference
-Full input schemas for all 15 tools in **v1.7.0** (protocol `2026-07-28`). Generated from the live `tools/list` response by `npm run sync-docs` — do not edit by hand.
+Full input schemas for all 15 tools in **v1.9.0** (protocol `2026-07-28`). Generated from the live `tools/list` response by `npm run sync-docs` — do not edit by hand.
 
 > **Caveats:** `get_yield_estimate` and `payment_plan` are estimates computed on source-dated inputs — **not financial advice**. Evlek does not expose title-deed (koçan) or legal-procedure tools: that taxonomy has not passed an independent KKTC legal audit, so it is deliberately out of the MCP surface.
 
@@ -69,7 +69,66 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
       "type": "number"
     },
     "listings": {
-      "type": "array"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "listingNumber": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "priceGbp": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "bedrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "areaSqm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "coverImageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "appliedFilters": {
+      "type": "object"
     }
   }
 }
@@ -142,7 +201,7 @@ Returns the live Evlek Price Index: aggregated average, median, min, max prices 
 ## 3. `get_market_overview`
 **Get Northern Cyprus Market Overview**
 
-Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules).
+Returns a live, high-level market overview for Northern Cyprus property: active listing counts and average/median sale & rent prices per city (same live data as get_price_index/compare_cities), estimated gross rental yield where sample size allows, and investment-tool routing. Coverage grows automatically as more listings are added to Evlek.
 
 ### Input schema
 ```json
@@ -157,14 +216,14 @@ Returns a high-level market overview for Northern Cyprus property: average rents
 {
   "type": "object",
   "properties": {
-    "source": {
+    "generatedAt": {
       "type": "string"
     },
-    "lastUpdated": {
-      "type": "string"
+    "totalActiveListings": {
+      "type": "number"
     },
-    "indexes": {
-      "type": "object"
+    "cities": {
+      "type": "array"
     },
     "investmentHighlights": {
       "type": "array",
@@ -676,7 +735,7 @@ Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live, date
 ## 11. `get_listing_detail`
 **Get Full Detail for a Single Evlek Listing**
 
-Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, and per-photo captions and tags. Contact details are intentionally omitted. Pass a UUID from search_listings.
+Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions/tags, and AI virtual-staging before/after pairs where available (always AI-disclosed). Contact details are intentionally omitted. Pass a UUID from search_listings.
 
 ### Input schema
 ```json
@@ -818,6 +877,37 @@ Return a 360° profile of one active Evlek listing by UUID: title, description, 
         }
       }
     },
+    "virtualStaging": {
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "beforeUrl": {
+                "type": "string"
+              },
+              "afterUrl": {
+                "type": "string"
+              },
+              "style": {
+                "type": "string"
+              },
+              "roomType": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "disclosure": {
+          "type": "string"
+        }
+      }
+    },
     "url": {
       "type": "string"
     }
@@ -869,6 +959,68 @@ Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-t
           }
         }
       }
+    },
+    "listings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "listingNumber": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "priceGbp": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "bedrooms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "areaSqm": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "coverImageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "appliedFilters": {
+      "type": "object"
     }
   }
 }
@@ -916,6 +1068,35 @@ Fetch the full detail of one Evlek listing by id (from search): title, descripti
     },
     "metadata": {
       "type": "object"
+    },
+    "coverImageUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "caption": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -1128,6 +1309,37 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
         }
       }
     },
+    "virtualStaging": {
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "beforeUrl": {
+                "type": "string"
+              },
+              "afterUrl": {
+                "type": "string"
+              },
+              "style": {
+                "type": "string"
+              },
+              "roomType": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "disclosure": {
+          "type": "string"
+        }
+      }
+    },
     "url": {
       "type": "string"
     }
@@ -1142,7 +1354,7 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
 - `evlek://price-index/{city}` — price-index
 - `evlek://district/{city}/{district}` — district-profile
 
-## Resources (7)
+## Resources (10)
 
 | URI | Name |
 |---|---|
@@ -1153,6 +1365,9 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
 | `evlek://price-index/guzelyurt` | price-index-guzelyurt |
 | `evlek://price-index/lefke` | price-index-lefke |
 | `evlek://district/girne/alsancak` | district-girne-alsancak |
+| `ui://evlek/listing-cards-v2.html` | listing-cards |
+| `ui://evlek/listing-detail-v2.html` | listing-detail |
+| `ui://evlek/price-index-v2.html` | price-index |
 
 ## Prompts (2)
 

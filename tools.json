@@ -59,7 +59,66 @@
             "type": "number"
           },
           "listings": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "listingNumber": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "district": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "priceGbp": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "bedrooms": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "areaSqm": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string"
+                },
+                "coverImageUrl": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "appliedFilters": {
+            "type": "object"
           }
         }
       },
@@ -67,6 +126,18 @@
         "readOnlyHint": true,
         "destructiveHint": false,
         "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://evlek/listing-cards-v2.html",
+          "visibility": [
+            "model",
+            "app"
+          ]
+        },
+        "openai/outputTemplate": "ui://evlek/listing-cards-v2.html",
+        "openai/toolInvocation/invoking": "Searching Evlek listings…",
+        "openai/toolInvocation/invoked": "Listings ready."
       }
     },
     {
@@ -124,12 +195,24 @@
         "readOnlyHint": true,
         "destructiveHint": false,
         "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://evlek/price-index-v2.html",
+          "visibility": [
+            "model",
+            "app"
+          ]
+        },
+        "openai/outputTemplate": "ui://evlek/price-index-v2.html",
+        "openai/toolInvocation/invoking": "Building price index…",
+        "openai/toolInvocation/invoked": "Price index ready."
       }
     },
     {
       "name": "get_market_overview",
       "title": "Get Northern Cyprus Market Overview",
-      "description": "Returns a high-level market overview for Northern Cyprus property: average rents and sale prices by major city, rental yields, investment highlights, and key facts (taxes, foreign ownership rules).",
+      "description": "Returns a live, high-level market overview for Northern Cyprus property: active listing counts and average/median sale & rent prices per city (same live data as get_price_index/compare_cities), estimated gross rental yield where sample size allows, and investment-tool routing. Coverage grows automatically as more listings are added to Evlek.",
       "inputSchema": {
         "type": "object",
         "properties": {}
@@ -137,14 +220,14 @@
       "outputSchema": {
         "type": "object",
         "properties": {
-          "source": {
+          "generatedAt": {
             "type": "string"
           },
-          "lastUpdated": {
-            "type": "string"
+          "totalActiveListings": {
+            "type": "number"
           },
-          "indexes": {
-            "type": "object"
+          "cities": {
+            "type": "array"
           },
           "investmentHighlights": {
             "type": "array",
@@ -623,7 +706,7 @@
     {
       "name": "get_listing_detail",
       "title": "Get Full Detail for a Single Evlek Listing",
-      "description": "Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, and per-photo captions and tags. Contact details are intentionally omitted. Pass a UUID from search_listings.",
+      "description": "Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions/tags, and AI virtual-staging before/after pairs where available (always AI-disclosed). Contact details are intentionally omitted. Pass a UUID from search_listings.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -758,6 +841,37 @@
               }
             }
           },
+          "virtualStaging": {
+            "type": "object",
+            "properties": {
+              "available": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "beforeUrl": {
+                      "type": "string"
+                    },
+                    "afterUrl": {
+                      "type": "string"
+                    },
+                    "style": {
+                      "type": "string"
+                    },
+                    "roomType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "disclosure": {
+                "type": "string"
+              }
+            }
+          },
           "url": {
             "type": "string"
           }
@@ -767,6 +881,18 @@
         "readOnlyHint": true,
         "destructiveHint": false,
         "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://evlek/listing-detail-v2.html",
+          "visibility": [
+            "model",
+            "app"
+          ]
+        },
+        "openai/outputTemplate": "ui://evlek/listing-detail-v2.html",
+        "openai/toolInvocation/invoking": "Loading listing detail…",
+        "openai/toolInvocation/invoked": "Listing loaded."
       }
     },
     {
@@ -804,6 +930,68 @@
                 }
               }
             }
+          },
+          "listings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "listingNumber": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "district": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "priceGbp": {
+                  "type": "number"
+                },
+                "currency": {
+                  "type": "string"
+                },
+                "bedrooms": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "areaSqm": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "type": {
+                  "type": "string"
+                },
+                "coverImageUrl": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "appliedFilters": {
+            "type": "object"
           }
         }
       },
@@ -811,6 +999,18 @@
         "readOnlyHint": true,
         "destructiveHint": false,
         "openWorldHint": true
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://evlek/listing-cards-v2.html",
+          "visibility": [
+            "model",
+            "app"
+          ]
+        },
+        "openai/outputTemplate": "ui://evlek/listing-cards-v2.html",
+        "openai/toolInvocation/invoking": "Searching Evlek listings…",
+        "openai/toolInvocation/invoked": "Listings ready."
       }
     },
     {
@@ -846,6 +1046,35 @@
           },
           "metadata": {
             "type": "object"
+          },
+          "coverImageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "photos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "caption": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       },
@@ -1045,6 +1274,37 @@
                     "type": "string"
                   }
                 }
+              }
+            }
+          },
+          "virtualStaging": {
+            "type": "object",
+            "properties": {
+              "available": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "beforeUrl": {
+                      "type": "string"
+                    },
+                    "afterUrl": {
+                      "type": "string"
+                    },
+                    "style": {
+                      "type": "string"
+                    },
+                    "roomType": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "disclosure": {
+                "type": "string"
               }
             }
           },

@@ -108,7 +108,7 @@ npm test              # live: initialize + tools/list + a real tools/call
 OFFLINE=1 npm test    # offline: introspection works with zero network
 ```
 
-## Available tools (v1.7.0 — 15 tools)
+## Available tools (v1.9.0 — 15 tools)
 
 | # | Tool | What it does |
 |---|------|--------------|
@@ -127,6 +127,22 @@ OFFLINE=1 npm test    # offline: introspection works with zero network
 | 13 | `fetch` | **(ChatGPT-compatible)** Fetch full listing detail by id from `search`. |
 | 14 | `list_locations` | Valid city + district dictionary — call first when unsure of location names. |
 | 15 | `get_listing_by_number` | Look up a listing by its `EVL-XXXXXX` listing number. |
+
+### Interactive widgets (MCP Apps / SEP-1865)
+
+Three tools additionally ship a sandboxed HTML view that MCP Apps-capable hosts
+(Claude web/desktop) render inline in the conversation:
+
+| Tool | Widget | What you get |
+|---|---|---|
+| `search_listings`, `search` | `ui://evlek/listing-cards-v2.html` | Card grid with cover photos; per-card drill-down into the detail view without leaving the widget |
+| `get_listing_detail` | `ui://evlek/listing-detail-v2.html` | Photo gallery with AI captions, spec sheet, and a before/after AI virtual-staging comparison slider |
+| `get_price_index` | `ui://evlek/price-index-v2.html` | District bar chart with explicit sample-size confidence tiers |
+
+Views are static, self-contained HTML — no bundler, no third-party JS. Listing
+data reaches them only at runtime over `postMessage` and is written with
+`textContent`, never `innerHTML`. CSP is declared per resource
+(`_meta.ui.csp`) and limited to the public listing-photo origin.
 
 See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and response examples.
 
@@ -186,9 +202,9 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 1.7.0 (live)
+- **MCP version:** 1.9.0 (live)
 - **Protocol:** 2026-07-28
-- **Primitives:** 15 tools · 7 resources · 2 resource templates · 2 prompts
+- **Primitives:** 15 tools · 7 data resources + 3 interactive widget resources · 2 resource templates · 2 prompts
 - **Auth:** none (public read-only)
 - **Endpoint:** `https://evlek.app/api/mcp`
 - **MCP Registry:** [`app.evlek/mcp-server`](https://registry.modelcontextprotocol.io)
