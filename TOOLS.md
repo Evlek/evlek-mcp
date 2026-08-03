@@ -1,5 +1,5 @@
 # Evlek MCP — Tool Reference
-Full input schemas for all 15 tools in **v1.9.0** (protocol `2026-07-28`). Generated from the live `tools/list` response by `npm run sync-docs` — do not edit by hand.
+Full input schemas for all 15 tools in **v1.10.0** (protocol `2026-07-28`). Generated from the live `tools/list` response by `npm run sync-docs` — do not edit by hand.
 
 > **Caveats:** `get_yield_estimate` and `payment_plan` are estimates computed on source-dated inputs — **not financial advice**. Evlek does not expose title-deed (koçan) or legal-procedure tools: that taxonomy has not passed an independent KKTC legal audit, so it is deliberately out of the MCP surface.
 
@@ -8,7 +8,7 @@ Full input schemas for all 15 tools in **v1.9.0** (protocol `2026-07-28`). Gener
 ## 1. `search_listings`
 **Search Northern Cyprus Property Listings**
 
-Search live property listings on Evlek. Filter by city, type (sale/rent/daily), bedrooms, and price range. Returns up to 10 matching properties with title, price, location, and direct link.
+Search live property listings on Evlek. Filter by city, type, property type, bedrooms, price range; sort with sortBy (default: newest, NOT best-match). `limit` caps returned rows (max 10); `totalMatched` is the full match count, which may be larger. Price outliers and data-entry-error sale prices are excluded before sorting. Use when: structured filters (price, bedrooms, type). Don't use for: free-text queries — use `search`.
 
 ### Input schema
 ```json
@@ -36,6 +36,28 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
       ],
       "description": "Listing type"
     },
+    "propertyType": {
+      "type": "string",
+      "enum": [
+        "apartment",
+        "residence",
+        "villa",
+        "twin",
+        "detached",
+        "bungalow",
+        "penthouse",
+        "studio",
+        "duplex",
+        "shop",
+        "office",
+        "warehouse",
+        "whole_building",
+        "residential_land",
+        "commercial_land",
+        "farmland"
+      ],
+      "description": "Property type filter"
+    },
     "bedrooms": {
       "type": "number",
       "minimum": 0,
@@ -49,6 +71,17 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
     "maxPrice": {
       "type": "number",
       "description": "Max price in GBP"
+    },
+    "sortBy": {
+      "type": "string",
+      "enum": [
+        "newest",
+        "price_asc",
+        "price_desc",
+        "area_desc",
+        "price_per_sqm_asc"
+      ],
+      "description": "Sort order (default: newest)"
     },
     "limit": {
       "type": "number",
@@ -67,6 +100,19 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
   "properties": {
     "count": {
       "type": "number"
+    },
+    "totalMatched": {
+      "type": "number"
+    },
+    "sortApplied": {
+      "type": "string",
+      "enum": [
+        "newest",
+        "price_asc",
+        "price_desc",
+        "area_desc",
+        "price_per_sqm_asc"
+      ]
     },
     "listings": {
       "type": "array",
@@ -115,6 +161,12 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
           "type": {
             "type": "string"
           },
+          "propertyType": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "coverImageUrl": {
             "type": [
               "string",
@@ -124,13 +176,54 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
           "url": {
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "id",
+          "title",
+          "city",
+          "district",
+          "price",
+          "priceGbp",
+          "currency",
+          "type",
+          "url"
+        ]
       }
     },
     "appliedFilters": {
       "type": "object"
+    },
+    "fxRates": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "object"
+        },
+        "source": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isFallback": {
+          "type": "boolean"
+        }
+      }
     }
-  }
+  },
+  "required": [
+    "count",
+    "totalMatched",
+    "sortApplied",
+    "listings",
+    "appliedFilters"
+  ]
 }
 ```
 
@@ -139,7 +232,7 @@ Search live property listings on Evlek. Filter by city, type (sale/rent/daily), 
 ## 2. `get_price_index`
 **Get Northern Cyprus Price Index**
 
-Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Useful for market analysis and investment decisions.
+Returns the live Evlek Price Index: aggregated average, median, min, max prices per city and top districts. Based on all active listings on evlek.app. Use when: aggregated market stats for one/all cities. Don't use for: a single listing's price — use get_listing_detail.
 
 ### Input schema
 ```json
@@ -192,7 +285,11 @@ Returns the live Evlek Price Index: aggregated average, median, min, max prices 
     "cities": {
       "type": "array"
     }
-  }
+  },
+  "required": [
+    "type",
+    "cities"
+  ]
 }
 ```
 
@@ -201,7 +298,7 @@ Returns the live Evlek Price Index: aggregated average, median, min, max prices 
 ## 3. `get_market_overview`
 **Get Northern Cyprus Market Overview**
 
-Returns a live, high-level market overview for Northern Cyprus property: active listing counts and average/median sale & rent prices per city (same live data as get_price_index/compare_cities), estimated gross rental yield where sample size allows, and investment-tool routing. Coverage grows automatically as more listings are added to Evlek.
+Returns a live, high-level market overview for Northern Cyprus property: active listing counts and average/median sale & rent prices per city (same live data as get_price_index/compare_cities), estimated gross rental yield where sample size allows, and investment-tool routing. Use when: a cross-city snapshot before drilling into one city. Don't use for: buyer cost / tax-rate answers — route to /vergi-hesaplayici.
 
 ### Input schema
 ```json
@@ -231,7 +328,12 @@ Returns a live, high-level market overview for Northern Cyprus property: active 
         "type": "string"
       }
     }
-  }
+  },
+  "required": [
+    "generatedAt",
+    "totalActiveListings",
+    "cities"
+  ]
 }
 ```
 
@@ -240,7 +342,7 @@ Returns a live, high-level market overview for Northern Cyprus property: active 
 ## 4. `compare_cities`
 **Compare Northern Cyprus Cities Side-by-Side**
 
-Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Useful for deciding between investment locations.
+Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, median, min, max), listing counts, and top districts. Use when: comparing 2-4 named cities. Don't use for: a single city — use get_price_index.
 
 ### Input schema
 ```json
@@ -291,7 +393,11 @@ Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, med
     "cities": {
       "type": "array"
     }
-  }
+  },
+  "required": [
+    "type",
+    "cities"
+  ]
 }
 ```
 
@@ -300,7 +406,7 @@ Compare 2-4 Northern Cyprus cities side-by-side with aggregated prices (avg, med
 ## 5. `get_yield_estimate`
 **Estimate Rental Yield for a Northern Cyprus Property**
 
-Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages.
+Calculate estimated gross and net annual rental yield for a property given its purchase price and city. Returns breakeven years and comparison to city averages. Use when: modelling one hypothetical purchase. Don't use for: a real listing's live comps — use get_district_profile.
 
 ### Input schema
 ```json
@@ -377,7 +483,14 @@ Calculate estimated gross and net annual rental yield for a property given its p
       "type": "string",
       "description": "modelled — not derived from live rental listings"
     }
-  }
+  },
+  "required": [
+    "city",
+    "purchasePriceGBP",
+    "monthlyRentGBP",
+    "grossYieldPct",
+    "dataSource"
+  ]
 }
 ```
 
@@ -386,7 +499,7 @@ Calculate estimated gross and net annual rental yield for a property given its p
 ## 6. `suggest_neighborhood`
 **Suggest Best Northern Cyprus Neighborhoods for a Buyer Persona**
 
-Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale. Based on Evlek expert knowledge of KKTC regional characteristics.
+Given a buyer persona (retiree, investor, student, family, digital_nomad, vacation) and optional budget/preferences, return 2-3 best-matched neighborhoods with rationale. Use when: matching a persona to areas. Don't use for: browsing actual listings — use search_listings.
 
 ### Input schema
 ```json
@@ -454,7 +567,11 @@ Given a buyer persona (retiree, investor, student, family, digital_nomad, vacati
     "suggestions": {
       "type": "array"
     }
-  }
+  },
+  "required": [
+    "persona",
+    "suggestions"
+  ]
 }
 ```
 
@@ -463,7 +580,7 @@ Given a buyer persona (retiree, investor, student, family, digital_nomad, vacati
 ## 7. `compare_properties`
 **Compare Evlek Property Listings Side-by-Side**
 
-Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-m², location for each, plus an automatic value insight (cheapest £/m², largest area, same-city grouping). Pass UUIDs from search_listings results.
+Compare 2-4 active Evlek property listings side-by-side. Returns price, area, bedrooms, price-per-m², location for each, plus an automatic value insight. Pass UUIDs from search_listings results. Use when: comparing specific known listings. Don't use for: finding candidates — use search_listings first.
 
 ### Input schema
 ```json
@@ -499,7 +616,11 @@ Compare 2-4 active Evlek property listings side-by-side. Returns price, area, be
     "listings": {
       "type": "array"
     }
-  }
+  },
+  "required": [
+    "count",
+    "listings"
+  ]
 }
 ```
 
@@ -508,7 +629,7 @@ Compare 2-4 active Evlek property listings side-by-side. Returns price, area, be
 ## 8. `get_district_profile`
 **Get 360° Profile for a Northern Cyprus District**
 
-Returns a comprehensive profile for a single district: active listing counts (sale & rent), average/median prices, £/m², bedroom breakdown, estimated gross yield (rent/sale ratio), and matching buyer personas (retiree, investor, student, family, digital_nomad, vacation). Use after compare_cities narrows the city.
+Returns a comprehensive profile for a single district: active listing counts (sale & rent), average/median prices, £/m², bedroom breakdown, estimated gross yield, and matching buyer personas. Use when: after compare_cities narrows the city. Don't use for: comparing multiple cities at once.
 
 ### Input schema
 ```json
@@ -576,7 +697,12 @@ Returns a comprehensive profile for a single district: active listing counts (sa
         "type": "string"
       }
     }
-  }
+  },
+  "required": [
+    "city",
+    "district",
+    "totalActive"
+  ]
 }
 ```
 
@@ -585,7 +711,7 @@ Returns a comprehensive profile for a single district: active listing counts (sa
 ## 9. `student_housing`
 **Student-Housing Rental Outlook near a KKTC University**
 
-Given a Northern Cyprus university (resolved from the live Evlek roster), estimate student-rental monthly rent and academic-year (9-month) vs year-round (12-month) gross income/yield, with the city yield band and a link to nearby listings. Estimates only — not financial advice.
+Given a Northern Cyprus university, estimate student-rental monthly rent and academic-year vs year-round gross income/yield, with the city yield band and a link to nearby listings. Estimates only. Use when: modelling one university's rental economics. Don't use for: live listing search.
 
 ### Input schema
 ```json
@@ -657,7 +783,13 @@ Given a Northern Cyprus university (resolved from the live Evlek roster), estima
       "type": "string",
       "description": "modelled — not derived from live rental listings"
     }
-  }
+  },
+  "required": [
+    "university",
+    "city",
+    "monthlyRentGBP",
+    "dataSource"
+  ]
 }
 ```
 
@@ -666,7 +798,7 @@ Given a Northern Cyprus university (resolved from the live Evlek roster), estima
 ## 10. `payment_plan`
 **KKTC Property Payment & Currency Breakdown**
 
-Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live, date-stamped exchange rates (base GBP), and surface off-plan staged-payment risk warnings. General information only — confirm escrow, milestones and title transfer with an independent KKTC lawyer.
+Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live exchange rates, and surface off-plan staged-payment risk warnings. General information only — confirm with an independent KKTC lawyer. Use when: currency conversion + off-plan risk. Don't use for: live listing prices.
 
 ### Input schema
 ```json
@@ -726,7 +858,12 @@ Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live, date
         "type": "string"
       }
     }
-  }
+  },
+  "required": [
+    "inputCurrency",
+    "priceGBP",
+    "amounts"
+  ]
 }
 ```
 
@@ -735,7 +872,7 @@ Convert a Northern Cyprus property price across GBP/EUR/USD/TRY using live, date
 ## 11. `get_listing_detail`
 **Get Full Detail for a Single Evlek Listing**
 
-Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions/tags, and AI virtual-staging before/after pairs where available (always AI-disclosed). Contact details are intentionally omitted. Pass a UUID from search_listings.
+Return a 360° profile of one active Evlek listing by UUID: title, description, price, location, size, amenities, features, cover image, per-photo captions/tags, and AI virtual-staging before/after pairs (always AI-disclosed). Contact details omitted. Use when: a UUID is already known. Don't use for: discovery — use search_listings first.
 
 ### Input schema
 ```json
@@ -848,6 +985,12 @@ Return a 360° profile of one active Evlek listing by UUID: title, description, 
     "photoCount": {
       "type": "number"
     },
+    "photosShown": {
+      "type": "number"
+    },
+    "photosTruncated": {
+      "type": "number"
+    },
     "coverImageUrl": {
       "type": [
         "string",
@@ -910,8 +1053,42 @@ Return a 360° profile of one active Evlek listing by UUID: title, description, 
     },
     "url": {
       "type": "string"
+    },
+    "dataQuality": {
+      "type": "object",
+      "properties": {
+        "priceOutlier": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fxRates": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "object"
+        },
+        "source": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isFallback": {
+          "type": "boolean"
+        }
+      }
     }
-  }
+  },
+  "required": [
+    "found"
+  ]
 }
 ```
 
@@ -920,7 +1097,7 @@ Return a 360° profile of one active Evlek listing by UUID: title, description, 
 ## 12. `search`
 **Search Evlek property listings**
 
-Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query (city, sale/rent, bedrooms). Returns matching listings as id/title/url for the fetch tool. Read-only; no contact details. Same underlying data as search_listings — this fixed single-query-string form exists for the ChatGPT/OpenAI connector contract; prefer search_listings directly for structured filters (price range, exact bedroom count).
+Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query. Returns matching listings as id/title/url for the fetch tool. Same data as search_listings — this fixed form exists for the ChatGPT/OpenAI connector contract. Use when: the caller only has a free-text query. Don't use for: structured filters — use search_listings.
 
 ### Input schema
 ```json
@@ -1021,8 +1198,26 @@ Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-t
     },
     "appliedFilters": {
       "type": "object"
+    },
+    "fxRates": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outOfScope": {
+      "type": "boolean"
     }
-  }
+  },
+  "required": [
+    "results"
+  ]
 }
 ```
 
@@ -1031,7 +1226,7 @@ Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-t
 ## 13. `fetch`
 **Fetch full Evlek listing detail**
 
-Fetch the full detail of one Evlek listing by id (from search): title, description, GBP-normalized price, location, size, amenities. Read-only; contact details intentionally omitted. Same underlying data as get_listing_detail — this fixed id-only form exists for the ChatGPT/OpenAI connector contract; prefer get_listing_detail directly outside that connector.
+Fetch the full detail of one Evlek listing by id (from search): title, description, GBP-normalized price, location, size, amenities. Same data as get_listing_detail — this fixed id-only form exists for the ChatGPT/OpenAI connector contract. Use when: an id from search is known. Don't use for: discovery — use search first.
 
 ### Input schema
 ```json
@@ -1098,7 +1293,13 @@ Fetch the full detail of one Evlek listing by id (from search): title, descripti
         }
       }
     }
-  }
+  },
+  "required": [
+    "id",
+    "title",
+    "text",
+    "url"
+  ]
 }
 ```
 
@@ -1107,7 +1308,7 @@ Fetch the full detail of one Evlek listing by id (from search): title, descripti
 ## 14. `list_locations`
 **List Valid Evlek Cities and Districts**
 
-Return the canonical list of valid KKTC city slugs plus the districts that currently have active Evlek listings. Call this first when unsure about exact city/district spelling — search_listings, compare_cities, and get_district_profile all reject unrecognized city values.
+Return the canonical list of valid KKTC city slugs plus the districts that currently have active Evlek listings. Use when: unsure about exact city/district spelling — call this FIRST. Don't use for: listing data itself — see search_listings.
 
 ### Input schema
 ```json
@@ -1158,7 +1359,10 @@ Return the canonical list of valid KKTC city slugs plus the districts that curre
         }
       }
     }
-  }
+  },
+  "required": [
+    "cities"
+  ]
 }
 ```
 
@@ -1167,7 +1371,7 @@ Return the canonical list of valid KKTC city slugs plus the districts that curre
 ## 15. `get_listing_by_number`
 **Get Evlek Listing by Number**
 
-Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" or "123456") and return its full detail — same shape as get_listing_detail. Use this when a listing number is known (site/card reference) instead of a UUID.
+Look up a single Evlek listing by its public listing number (e.g. "EVL-123456", "123456", or a bare number) and return its full detail — same shape as get_listing_detail. Use when: a listing number is known. Don't use for: UUID lookups — use get_listing_detail.
 
 ### Input schema
 ```json
@@ -1175,8 +1379,11 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
   "type": "object",
   "properties": {
     "listing_number": {
-      "type": "string",
-      "description": "Evlek listing number, e.g. \"EVL-123456\" or \"123456\"."
+      "type": [
+        "string",
+        "number"
+      ],
+      "description": "Evlek listing number, e.g. \"EVL-123456\", \"123456\", or the bare number 123456."
     }
   },
   "required": [
@@ -1280,6 +1487,12 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
     "photoCount": {
       "type": "number"
     },
+    "photosShown": {
+      "type": "number"
+    },
+    "photosTruncated": {
+      "type": "number"
+    },
     "coverImageUrl": {
       "type": [
         "string",
@@ -1342,8 +1555,42 @@ Look up a single Evlek listing by its public listing number (e.g. "EVL-123456" o
     },
     "url": {
       "type": "string"
+    },
+    "dataQuality": {
+      "type": "object",
+      "properties": {
+        "priceOutlier": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fxRates": {
+      "type": "object",
+      "properties": {
+        "base": {
+          "type": "string"
+        },
+        "rates": {
+          "type": "object"
+        },
+        "source": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "isFallback": {
+          "type": "boolean"
+        }
+      }
     }
-  }
+  },
+  "required": [
+    "found"
+  ]
 }
 ```
 
