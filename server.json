@@ -3,7 +3,7 @@
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
   "description": "AI-native property MCP for Northern Cyprus (KKTC/TRNC): listings, prices, districts, yields.",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
