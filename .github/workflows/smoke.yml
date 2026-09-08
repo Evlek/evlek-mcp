@@ -1,0 +1,28 @@
+# Behavioral smoke test — spawns the local stdio server and speaks real MCP
+# over stdio, twice: once fully offline (introspection only, zero network —
+# proves `npx github:Evlek/evlek-mcp` works with no internet) and once live
+# (initialize + tools/list count/annotations + a real tools/call against
+# evlek.app). Both modes are the same script (scripts/smoke-test.mjs), gated
+# by the OFFLINE env var.
+
+name: Smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - name: Offline introspection (zero network)
+        run: OFFLINE=1 npm test
+      - name: Live smoke (initialize + tools/list + tools/call)
+        run: npm test

@@ -26,38 +26,47 @@ import {
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
 
 const DATA_API = process.env.EVLEK_API_URL ?? 'https://evlek.app/api/mcp';
 const REQUEST_TIMEOUT_MS = 25_000;
 
-// Embedded tool contract — generated from the live service by
-// `npm run sync-tools`. Serving this locally means introspection
-// (tools/list) works with zero network access.
-const manifest = JSON.parse(
+// Embedded tool contract — projected from the live service's own tool
+// definitions by `pnpm mcp:export-public` (in the source repo) and copied
+// here verbatim as a flat array (S2.1 C13 — matches the live route's own
+// tools/list projection exactly; the older hand-maintained tools.json was a
+// `{ tools: [...] }` wrapper, which this array is not). Serving this
+// locally means introspection (tools/list) works with zero network access.
+const tools = JSON.parse(
     readFileSync(join(__dirname, '..', 'tools.json'), 'utf8')
 );
 
+// Single source of truth for the reported server version — package.json,
+// not a second hardcoded literal that can drift from it.
+const { version: SERVER_VERSION } = require('../package.json');
+
 const server = new Server(
-    { name: 'evlek-mcp', version: '1.6.0' },
+    { name: 'evlek-mcp', version: SERVER_VERSION },
     { capabilities: { tools: {} } }
 );
 
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: manifest.tools,
+    tools,
 }));
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
 
-    const known = manifest.tools.some((t) => t.name === name);
+    const known = tools.some((t) => t.name === name);
     if (!known) {
         return {
             content: [
                 {
                     type: 'text',
-                    text: `Unknown tool "${name}". Available tools: ${manifest.tools
+                    text: `Unknown tool "${name}". Available tools: ${tools
                         .map((t) => t.name)
                         .join(', ')}.`,
                 },
@@ -129,5 +138,5 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 const transport = new StdioServerTransport();
 await server.connect(transport);
 console.error(
-    `[evlek-mcp] stdio server ready — ${manifest.tools.length} tools (data: ${DATA_API})`
+    `[evlek-mcp] stdio server ready — ${tools.length} tools (data: ${DATA_API})`
 );

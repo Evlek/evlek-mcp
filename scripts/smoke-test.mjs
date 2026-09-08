@@ -54,10 +54,12 @@ check('initialize', !!init.result?.serverInfo, init.result?.serverInfo?.name);
 const list = await rpc('tools/list', {});
 const tools = list.result?.tools ?? [];
 // Assert against the embedded contract rather than a hardcoded number — the
-// hosted surface changes (18 → 15 in PR-E) and a literal here just goes stale.
+// hosted surface changes (18 → 15 in PR-E, 15 → 12 in S2.1) and a literal
+// here just goes stale. tools.json (S2.1 C13) is a flat array, not a
+// `{ tools: [...] }` wrapper.
 const embeddedToolCount = JSON.parse(
     readFileSync(new URL('../tools.json', import.meta.url), 'utf8')
-).tools.length;
+).length;
 check(
     'tools/list count',
     tools.length === embeddedToolCount,

@@ -1,0 +1,63 @@
+# Guards against the drift this repo shipped for months: tools.json/server.json/
+# TOOLS.md are a projection of the live service (see README "Sözleşme dosyaları" /
+# `pnpm mcp:export-public` in the source repo), copied here by hand on each sync
+# PR. This workflow catches the next time that copy is forgotten or goes stale —
+# it compares the live server's own `tools/list` response against this repo's
+# tools.json: name set, `annotations`, and each tool's `inputSchema` property
+# keys must match exactly.
+#
+# Network-down is NOT a drift finding: if evlek.app is unreachable the compare
+# job is skipped (not failed) so a transient outage never blocks a PR.
+
+name: Contract Drift
+
+on:
+  schedule:
+    - cron: "17 5 * * *" # daily
+  pull_request:
+    paths:
+      - "tools.json"
+      - "server.json"
+      - "src/index.js"
+      - "scripts/check-contract-drift.mjs"
+      - ".github/workflows/contract-drift.yml"
+  workflow_dispatch: {}
+
+jobs:
+  check-connectivity:
+    runs-on: ubuntu-latest
+    outputs:
+      reachable: ${{ steps.probe.outputs.reachable }}
+    steps:
+      - name: Probe live MCP endpoint
+        id: probe
+        run: |
+          if curl -fsS -m 15 -X POST https://evlek.app/api/mcp \
+            -H 'Content-Type: application/json' \
+            -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' \
+            -o /tmp/live-tools-list.json; then
+            echo "reachable=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "reachable=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::evlek.app/api/mcp unreachable — contract-drift check skipped, not failed."
+          fi
+      - name: Upload live response
+        if: steps.probe.outputs.reachable == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-tools-list
+          path: /tmp/live-tools-list.json
+          retention-days: 1
+
+  drift-check:
+    needs: check-connectivity
+    if: needs.check-connectivity.outputs.reachable == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: live-tools-list
+          path: /tmp
+      - name: Compare live tools/list against tools.json
+        run: node scripts/check-contract-drift.mjs /tmp/live-tools-list.json tools.json
