@@ -84,7 +84,7 @@ More configs: [`examples/`](./examples/)
 
 ### Local stdio server (this repository)
 
-This repo is also a runnable MCP server. It answers `initialize` / `tools/list` entirely locally from the embedded tool contract ([`tools.json`](./tools.json)) and fetches live data from the Evlek data API when a tool is called:
+This repo is also a runnable MCP server. It answers `initialize` / `tools/list` entirely locally from the embedded tool contract ([`tools.json`](./tools.json)) and fetches live data from the Evlek data API when a tool is called. It only implements tools — it does not declare the `resources` or `prompts` capability, so `resources/list` and `prompts/list` return a normal MCP "method not found" error on this bridge; those primitives (see below) are hosted-endpoint-only, reachable via the Streamable HTTP URL above. It also speaks whatever MCP protocol version the pinned `@modelcontextprotocol/sdk` supports during `initialize` (currently `2025-11-25`), not necessarily the hosted endpoint's `2026-07-28` — tool schemas are identical either way.
 
 ```bash
 npx github:Evlek/evlek-mcp        # or: npm install && npm start
@@ -151,14 +151,13 @@ data reaches them only at runtime over `postMessage` and is written with
 
 See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and response examples.
 
-### Resources (9) & resource templates (2)
+### Resources (12) & resource templates (2)
 
-Read-only `evlek://` data via `resources/list` / `resources/read`, plus parameterized templates via `resources/templates/list`:
+`resources/list` returns 12 resources on the hosted endpoint — 9 read-only `evlek://` data resources plus the 3 `ui://` interactive-widget resources described above (pre-declared so a host can pre-cache them). Parameterized templates are separate, via `resources/templates/list`:
 
-- **Templates:** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
-- **Instances:** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), a sample district profile (Girne/Alsancak), and 2 orientation guides — `evlek://guides/neighborhood-personas`, `evlek://guides/universities`.
-
-Three additional `ui://` widget resources back the interactive views below; per MCP Apps convention they are referenced only via each tool's `_meta.ui` and are not enumerated by `resources/list`.
+- **Templates (2):** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
+- **Data resources (9):** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), a sample district profile (Girne/Alsancak), and 2 orientation guides — `evlek://guides/neighborhood-personas`, `evlek://guides/universities`.
+- **Widget resources (3):** `ui://evlek/listing-cards-v2.html`, `ui://evlek/listing-detail-v2.html`, `ui://evlek/price-index-v2.html` — see "Interactive widgets" above.
 
 ### Prompts (2)
 
