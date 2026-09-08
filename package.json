@@ -1,6 +1,6 @@
 {
   "name": "evlek-mcp",
-  "version": "1.10.0",
+  "version": "2.1.0",
   "description": "Evlek — Northern Cyprus (KKTC/TRNC) property MCP server. Local stdio server backed by the live Evlek data API.",
   "type": "module",
   "bin": {
@@ -16,9 +16,7 @@
   ],
   "scripts": {
     "start": "node src/index.js",
-    "sync-tools": "node scripts/sync-tools.mjs",
-    "test": "node scripts/smoke-test.mjs",
-    "sync-docs": "node scripts/sync-docs.mjs"
+    "test": "node scripts/smoke-test.mjs"
   },
   "engines": {
     "node": ">=18"
