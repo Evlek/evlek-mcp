@@ -17,7 +17,7 @@ See [`claude-desktop-config.json`](./claude-desktop-config.json) — uses `mcp-r
 
 See [`cursor-config.json`](./cursor-config.json) — Cursor supports MCP natively over HTTP.
 
-> **Note:** Cursor has a global cap of **40 MCP tools across all servers**. Evlek uses 9 tools (15 in v2.0), so you have headroom.
+> **Note:** Cursor has a global cap of **40 MCP tools across all servers**. Evlek uses 8 tools (12 in v2.1), so you have headroom.
 
 ## Continue (VS Code / JetBrains)
 

@@ -12,6 +12,62 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## [3.0.0] - 2026-10-08
+
+Hosted service release (Evlak-Emlak PR #886); this repository synced to it.
+
+### Changed — breaking
+
+The 12 v2 tools are consolidated into **8**: `search_listings`, `search`,
+`fetch`, `get_listing`, `compare_listings`, `market_stats`,
+`list_locations`, `convert_currency`. Every tool is backed by one shared
+engine, so the tool text and `structuredContent` of a listing are built from
+the same data.
+
+Renamed tools stay callable as **deprecated aliases for one release** (not in
+`tools/list`; the answer starts with a `Deprecated: …` line and carries
+`structuredContent.deprecated`). **They are removed in 3.1.0.**
+
+| Old name | New name |
+|---|---|
+| `get_listing_detail` | `get_listing` (`propertyId` → `ref`) |
+| `get_listing_by_number` | `get_listing` (`listingNumber` → `ref`) |
+| `compare_properties` | `compare_listings` (`listingIds` → `ids`) |
+| `get_price_index` | `market_stats` (`type` → `transaction`) |
+| `compare_cities` | `market_stats` (`cities` → `city`, `type` → `transaction`) |
+| `get_district_profile` | `market_stats` |
+| `payment_plan` | `convert_currency` (`price` → `amount`; name reserved) |
+
+- `search_listings` has a new input schema: `transaction` (was `type`),
+  `priceMin`/`priceMax` (was `minPrice`/`maxPrice`), `sort` (was
+  `sortBy`), cursor paging with `cursor` (was `offset`), amenities in
+  `features` (were separate booleans), plus `bathroomsMin`, area and
+  land-area ranges, `currency`, `billsIncluded`, `availableNow`,
+  `noDeposit`, `contractType`, `nearUniversity`, `bbox`, `locale`.
+  At most 10 listings per call; without `transaction` sale and rent come
+  back as two groups, each with its own cursor.
+- `convert_currency` takes `amount` (was `price`); `list_locations`
+  gained `includeAliases`, `includeEmpty`.
+- Interactive widget URIs moved to `ui://evlek/*-v3.html`; `get_listing`
+  and `fetch` bind the detail view, `market_stats` the statistics view.
+
+### Added
+
+- `locale` (`tr` · `en` · `ru` · `de` · `ar`) on the structured
+  tools: answer text, amenity names, number formats and links follow it;
+  `search` answers in the language of its query.
+
+### Fixed (this repository)
+
+- `tools.json` / `TOOLS.md` re-exported from the 3.0.0 source. The
+  `Contract Drift` workflow had failed every daily run since 10 Sep 2026
+  (the hosted `search_listings` had a `query` key tools.json lacked); it
+  is green again against the live 3.0.0 server.
+- `server.json` kept in registry-manifest shape (name
+  `app.evlek/mcp-server`, description ≤ 100 characters), version 3.0.0 and
+  the 8-tool `_meta` list.
+- README: tool table, rename table, widget URIs, contract-file rules.
+
 ## [2.1.0] - 2026-09-08
 
 ### Changed

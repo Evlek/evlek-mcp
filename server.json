@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
-  "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data. Read-only, 12 tools.",
-  "version": "2.1.0",
+  "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data. Read-only, 8 tools.",
+  "version": "3.0.0",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
@@ -76,34 +76,6 @@
           "title": "Search Northern Cyprus Property Listings"
         },
         {
-          "name": "get_price_index",
-          "title": "Get Northern Cyprus Price Index"
-        },
-        {
-          "name": "compare_cities",
-          "title": "Compare Northern Cyprus Cities Side-by-Side"
-        },
-        {
-          "name": "compare_properties",
-          "title": "Compare Evlek Property Listings Side-by-Side"
-        },
-        {
-          "name": "get_district_profile",
-          "title": "Get Live Asking-Price Context for a Northern Cyprus District"
-        },
-        {
-          "name": "convert_currency",
-          "title": "Currency Conversion (GBP/EUR/USD/TRY)"
-        },
-        {
-          "name": "payment_plan",
-          "title": "Currency Conversion (payment-plan name reserved)"
-        },
-        {
-          "name": "get_listing_detail",
-          "title": "Get Full Detail for a Single Evlek Listing"
-        },
-        {
           "name": "search",
           "title": "Search Evlek property listings"
         },
@@ -112,12 +84,24 @@
           "title": "Fetch full Evlek listing detail"
         },
         {
-          "name": "list_locations",
-          "title": "List Valid Evlek Cities and Districts"
+          "name": "get_listing",
+          "title": "Get an Evlek Listing"
         },
         {
-          "name": "get_listing_by_number",
-          "title": "Get Evlek Listing by Number"
+          "name": "compare_listings",
+          "title": "Compare Evlek Listings"
+        },
+        {
+          "name": "market_stats",
+          "title": "Northern Cyprus Market Statistics"
+        },
+        {
+          "name": "list_locations",
+          "title": "List Evlek Locations"
+        },
+        {
+          "name": "convert_currency",
+          "title": "Currency Conversion (GBP/EUR/USD/TRY)"
         }
       ],
       "resourceTemplates": [
