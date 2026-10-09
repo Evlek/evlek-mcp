@@ -146,7 +146,7 @@ v2 template against v3 data. 3.0.1 moved them to `-v3-1` and 3.0.2 to `-v3-2`;
 the older v3 URIs keep answering with the current content.
 
 In ChatGPT (3.0.2) the listing data reaches the widget through the result `_meta["evlek/widget"]`,
-which ChatGPT shows only to the widget; the model gets a short summary (counts, price range,
+which ChatGPT shows only to the widget; for `search_listings` and `get_listing` the model gets a short summary (counts, price range,
 listing numbers). Other clients get the full `structuredContent` as before.
 
 Views are static, self-contained HTML — no bundler, no third-party JS. Listing

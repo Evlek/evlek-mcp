@@ -16,10 +16,10 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 Synced to the live server contract of Evlak-Emlak 3.0.2 (`pnpm mcp:export-public`).
 
-- ChatGPT only: `search_listings`, `search`, `get_listing` and `fetch` answer the model with a short summary and put the
-  full listing data in the result `_meta["evlek/widget"]`, which ChatGPT delivers only to the widget. Other clients are unchanged.
+- ChatGPT only: `search_listings` and `get_listing` answer the model with a short summary (price range of every match) and put the
+  full listing data in the result `_meta["evlek/widget"]`, which ChatGPT delivers only to the widget. `search` / `fetch` (deep-research contract) and other clients are unchanged.
 - Widget URIs `-v3-2` (the `-v3-1` and `-v3` URIs keep answering).
-- `search_listings` / `search` outputSchema require only `total`; summary fields declared as optional properties.
+- `search_listings` outputSchema requires only `total`; summary fields declared as optional properties.
 - Tool titles in sentence case ("Search Northern Cyprus property listings", "Get an Evlek listing", ...).
 - `market_stats` prints a price per m² as a whole number.
 

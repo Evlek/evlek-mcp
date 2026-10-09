@@ -984,6 +984,9 @@
             },
             "period": {
               "type": "string"
+            },
+            "scope": {
+              "type": "string"
             }
           }
         },
@@ -1751,59 +1754,13 @@
         "dataSource": {
           "type": "string"
         },
-        "priceRange": {
-          "type": [
-            "object",
-            "null"
-          ],
-          "properties": {
-            "min": {
-              "type": "number"
-            },
-            "max": {
-              "type": "number"
-            },
-            "currency": {
-              "type": "string"
-            },
-            "period": {
-              "type": "string"
-            }
-          }
-        },
-        "refs": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "topMatch": {
-          "type": "object",
-          "properties": {
-            "ref": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "priceLabel": {
-              "type": "string"
-            },
-            "district": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
-          }
-        },
         "query": {
           "type": "string",
           "description": "The query as read (cleaned, bounded)."
         },
         "criteria": {
           "type": "array",
-          "description": "What the sentence was understood as, with the words each came from.",
+          "description": "Everything the sentence was understood as, with the words each came from.",
           "items": {
             "type": "object",
             "properties": {
@@ -1848,7 +1805,7 @@
         },
         "clarifications": {
           "type": "array",
-          "description": "Questions to ask instead of guessing.",
+          "description": "Questions to ask the user instead of guessing.",
           "items": {
             "type": "object",
             "properties": {
@@ -1873,7 +1830,7 @@
         },
         "assumed": {
           "type": "array",
-          "description": "What was assumed to make a constraint a filter (currency, band, period).",
+          "description": "What had to be assumed to make a constraint a filter (a currency, a band, a period).",
           "items": {
             "type": "object",
             "properties": {
@@ -1942,14 +1899,14 @@
         },
         "message": {
           "type": "string",
-          "description": "Why nothing is listed, in the answer language (content[0].text stays the connector JSON)."
+          "description": "The reason, in the answer language, when there is nothing to list (content[0].text stays the connector JSON)."
         },
         "nearbyAlternatives": {
           "type": [
             "object",
             "null"
           ],
-          "description": "Only when nothing matched: ONE relaxation (district dropped, else budget +15 %), max 5 listings.",
+          "description": "Only when nothing matched: ONE relaxation (district dropped, else budget + 15 %), at most 5 listings.",
           "properties": {
             "relaxed": {
               "type": "string",
@@ -2264,7 +2221,7 @@
         }
       },
       "required": [
-        "total"
+        "results"
       ]
     },
     "annotations": {
@@ -2856,24 +2813,6 @@
         },
         "retryable": {
           "type": "boolean"
-        },
-        "ref": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "ChatGPT summary: listing number."
-        },
-        "priceLabel": {
-          "type": "string",
-          "description": "ChatGPT summary: printed price."
-        },
-        "agencyName": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "ChatGPT summary: office name."
         }
       }
     },
