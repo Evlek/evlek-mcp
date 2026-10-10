@@ -1,6 +1,6 @@
 {
   "name": "evlek-mcp",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "description": "Evlek — Northern Cyprus (KKTC/TRNC) property MCP server. Local stdio server backed by the live Evlek data API.",
   "type": "module",
   "bin": {

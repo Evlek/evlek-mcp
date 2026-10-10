@@ -12,6 +12,35 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.0.3 (2026-10-10)
+
+Synced to the live server contract of Evlak-Emlak 3.0.3 (main e26a68340, `pnpm mcp:export-public`).
+
+- ChatGPT `search` (request `_meta` with `openai/*`): the text stays the OpenAI contract JSON `{"results":[{id,title,url}]}`
+  with short titles ("1+1 Daire · Karaoğlanoğlu · EVL-101326"); `structuredContent.results` is the same list, plus `total`,
+  `shown` and `priceRange`; the listings go to `_meta["evlek/widget"]`. `search` without that `_meta` and `fetch` are unchanged.
+- Descriptions: `search_listings` starts "Use this when the user wants to find or see property listings; ..."; `search` starts
+  "Use only for research and citation lookups (deep research). ...".
+- The cards and detail widgets' `openai/widgetDescription` are the ChatGPT instruction lines (English).
+- Widget URIs `-v3-3` (the `-v3-2`, `-v3-1` and `-v3` URIs keep answering).
+
+## 3.0.2 (2026-10-09)
+
+Synced to the live server contract of Evlak-Emlak 3.0.2 (`pnpm mcp:export-public`).
+
+- ChatGPT only: `search_listings` and `get_listing` answer the model with a short summary (price range of every match) and put the
+  full listing data in the result `_meta["evlek/widget"]`, which ChatGPT delivers only to the widget. `search` / `fetch` (deep-research contract) and other clients are unchanged.
+- Widget URIs `-v3-2` (the `-v3-1` and `-v3` URIs keep answering).
+- `search_listings` outputSchema requires only `total`; summary fields declared as optional properties.
+- Tool titles in sentence case ("Search Northern Cyprus property listings", "Get an Evlek listing", ...).
+- `market_stats` prints a price per m² as a whole number.
+
+## 3.0.1 (2026-10-08)
+
+Not synced separately; included in 3.0.2. Accuracy and widget redesign after the first live ChatGPT test: the searched
+amenity leads every card, model guidance line in the text, `matchedFeatures` on cards, `idempotentHint` annotations,
+default page 8, widget URIs `-v3-1`.
+
 ## [3.0.0] - 2026-10-08
 
 Hosted service release (Evlak-Emlak PR #886); this repository synced to it.

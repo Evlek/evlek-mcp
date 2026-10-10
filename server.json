@@ -3,7 +3,7 @@
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
   "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data. Read-only, 8 tools.",
-  "version": "3.0.0",
+  "version": "3.0.3",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {
     "url": "https://github.com/Evlek/evlek-mcp",
@@ -73,7 +73,7 @@
       "tools": [
         {
           "name": "search_listings",
-          "title": "Search Northern Cyprus Property Listings"
+          "title": "Search Northern Cyprus property listings"
         },
         {
           "name": "search",
@@ -85,23 +85,23 @@
         },
         {
           "name": "get_listing",
-          "title": "Get an Evlek Listing"
+          "title": "Get an Evlek listing"
         },
         {
           "name": "compare_listings",
-          "title": "Compare Evlek Listings"
+          "title": "Compare Evlek listings"
         },
         {
           "name": "market_stats",
-          "title": "Northern Cyprus Market Statistics"
+          "title": "Northern Cyprus market statistics"
         },
         {
           "name": "list_locations",
-          "title": "List Evlek Locations"
+          "title": "List Evlek locations"
         },
         {
           "name": "convert_currency",
-          "title": "Currency Conversion (GBP/EUR/USD/TRY)"
+          "title": "Currency conversion (GBP/EUR/USD/TRY)"
         }
       ],
       "resourceTemplates": [
