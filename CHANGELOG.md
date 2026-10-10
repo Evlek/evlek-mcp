@@ -12,6 +12,18 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.0.3 (2026-10-10)
+
+Synced to the live server contract of Evlak-Emlak 3.0.3 (main e26a68340, `pnpm mcp:export-public`).
+
+- ChatGPT `search` (request `_meta` with `openai/*`): the text stays the OpenAI contract JSON `{"results":[{id,title,url}]}`
+  with short titles ("1+1 Daire · Karaoğlanoğlu · EVL-101326"); `structuredContent.results` is the same list, plus `total`,
+  `shown` and `priceRange`; the listings go to `_meta["evlek/widget"]`. `search` without that `_meta` and `fetch` are unchanged.
+- Descriptions: `search_listings` starts "Use this when the user wants to find or see property listings; ..."; `search` starts
+  "Use only for research and citation lookups (deep research). ...".
+- The cards and detail widgets' `openai/widgetDescription` are the ChatGPT instruction lines (English).
+- Widget URIs `-v3-3` (the `-v3-2`, `-v3-1` and `-v3` URIs keep answering).
+
 ## 3.0.2 (2026-10-09)
 
 Synced to the live server contract of Evlak-Emlak 3.0.2 (`pnpm mcp:export-public`).

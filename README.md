@@ -116,8 +116,8 @@ OFFLINE=1 npm test    # offline: introspection works with zero network
 
 | Tool | Title | Description |
 |------|-------|-------------|
-| `search_listings` | Search Northern Cyprus property listings | Search live Evlek property listings for sale and long-term rent in Northern Cyprus (KKTC/TRNC; prices in GBP unless a currency is given; 2+1 means bedrooms 2) with structured filters: transaction, city, district, property type, bedrooms, price, areas, amenities, nearby university. Pass the user's language as `locale` (tr\|en\|ru\|de\|ar): the text, amenity names, number formats and links follow it. Returns at most 10 listings per call, each as one readable line (type, place, price, rooms, area, a deterministic sentence, data notes, canonical link) plus a structured card; continue with the `nextCursor` of a group. Without `transaction`, listings for sale and for rent come as two separate groups, each with its own cursor that is only valid together with that group's transaction. Place names in any language are resolved; an unknown place returns suggestions instead of results. An amenity that cannot be filtered on is reported as not applied. For a free-text request use `search`; for one listing use `fetch` or `get_listing`. Returns advertised asking-price and listing facts only: not a valuation, verification of property-specific claims, forecast, ranking or recommendation. |
-| `search` | Search Evlek property listings | Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query in Turkish, English, Russian, German or Arabic. Returns matching listings as id/title/url for the fetch tool, newest first (sale and rent as two groups when the query names neither). The answer language follows the language of the query. Same data as search_listings: this fixed form exists for the ChatGPT/OpenAI connector contract. Use when: the caller only has a free-text query ("2+1 apartment in Kyrenia under 150000 pounds", "EVL-100464"). Don't use for: structured filters, paging or another answer language: use search_listings. |
+| `search_listings` | Search Northern Cyprus property listings | Use this when the user wants to find or see property listings; results are shown with real photos in the Evlek widget. Search live Evlek property listings for sale and long-term rent in Northern Cyprus (KKTC/TRNC; prices in GBP unless a currency is given; 2+1 means bedrooms 2) with structured filters: transaction, city, district, property type, bedrooms, price, areas, amenities, nearby university. Pass the user's language as `locale` (tr\|en\|ru\|de\|ar): the text, amenity names, number formats and links follow it. Returns at most 10 listings per call, each as one readable line (type, place, price, rooms, area, a deterministic sentence, data notes, canonical link) plus a structured card; continue with the `nextCursor` of a group. Without `transaction`, listings for sale and for rent come as two separate groups, each with its own cursor that is only valid together with that group's transaction. Place names in any language are resolved; an unknown place returns suggestions instead of results. An amenity that cannot be filtered on is reported as not applied. For one listing use `get_listing`. Returns advertised asking-price and listing facts only: not a valuation, verification of property-specific claims, forecast, ranking or recommendation. |
+| `search` | Search Evlek property listings | Use only for research and citation lookups (deep research). To show listings to the user, use search_listings instead. Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query in Turkish, English, Russian, German or Arabic. Returns matching listings as id/title/url for the fetch tool, newest first (sale and rent as two groups when the query names neither). The answer language follows the language of the query. Same data as search_listings: this fixed form exists for the ChatGPT/OpenAI connector contract. Use when: the caller only has a free-text query ("2+1 apartment in Kyrenia under 150000 pounds", "EVL-100464"). Don't use for: structured filters, paging or another answer language: use search_listings. |
 | `fetch` | Fetch full Evlek listing detail | Fetch the full detail of one Evlek listing: title, price, location, rooms, areas, amenities, data-quality notes and the canonical link. The id is the listing id (UUID) from a search result, a listing number such as EVL-100464, or an evlek.app listing link; the answer language follows the link (English otherwise). A listing that is not available (it does not exist, is not public, or was removed) always gets the same answer. Same data as get_listing: this fixed id-only form exists for the ChatGPT/OpenAI connector contract. Use when: an id from search is known. Don't use for: discovery (use search first) or another answer language (use get_listing). |
 | `get_listing` | Get an Evlek listing | Get the full details of ONE public Evlek listing (sale or long-term rent) in the user's language. `ref` is the listing id (UUID), the listing number (EVL-100464 or just 100464) or an evlek.app listing link in any language. Returns the price, rooms, bathrooms, built area and plot area (always separate), the approximate location, features, the office name, dates, data-quality notes, photos with captions where they exist, AI virtual-staging before/after images when the office approved them (always labelled as AI-generated) and the canonical link. Contact details are never included: send the user to the link. A listing that is unknown or no longer public answers found:false with code NOT_FOUND (this is not an error). Pass the user's language as `locale` (tr, en, ru, de or ar). |
 | `compare_listings` | Compare Evlek listings | Compare 2 to 4 public Evlek listings side by side in the user's language: price, price per m² (only when the built area is believable), rooms, bathrooms, built area and plot area (always separate), location, furnishing, key features and data-quality notes, plus a few descriptive highlights (lowest price, largest indoor area, most recently listed). `ids` takes listing ids (UUID), listing numbers (EVL-100464) or evlek.app listing links, in any mix; the order you give is kept. Sale and rent listings are never ranked against each other: a mixed request is shown in two groups with a warning. A reference that is unknown or no longer public is listed in `missingIds` with code NOT_FOUND (this is not an error). Descriptive facts only: no valuation and no recommendation. Pass the user's language as `locale` (tr, en, ru, de or ar). |
@@ -136,16 +136,16 @@ MCP Apps-capable hosts (Claude web/desktop) render inline in the conversation:
 
 | Tool | Widget | What you get |
 |---|---|---|
-| `search_listings`, `search` | `ui://evlek/listing-cards-v3-2.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view |
-| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-2.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
-| `market_stats` | `ui://evlek/price-index-v3-2.html` | Asking-price statistics per city / district |
+| `search_listings`, `search` | `ui://evlek/listing-cards-v3-3.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view |
+| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-3.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
+| `market_stats` | `ui://evlek/price-index-v3-3.html` | Asking-price statistics per city / district |
 
 `compare_listings`, `list_locations` and `convert_currency` have no widget. The
 widget URIs moved from `-v2` to `-v3` in 3.0.0 so a host never serves a cached
-v2 template against v3 data. 3.0.1 moved them to `-v3-1` and 3.0.2 to `-v3-2`;
+v2 template against v3 data. 3.0.1 moved them to `-v3-1`, 3.0.2 to `-v3-2` and 3.0.3 to `-v3-3`;
 the older v3 URIs keep answering with the current content.
 
-In ChatGPT (3.0.2) the listing data reaches the widget through the result `_meta["evlek/widget"]`,
+In ChatGPT (3.0.2, `search` since 3.0.3) the listing data reaches the widget through the result `_meta["evlek/widget"]`,
 which ChatGPT shows only to the widget; for `search_listings` and `get_listing` the model gets a short summary (counts, price range,
 listing numbers). Other clients get the full `structuredContent` as before.
 
@@ -162,7 +162,7 @@ See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and respon
 
 - **Templates (2):** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
 - **Data resources (9):** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), a sample district profile (Girne/Alsancak), and 2 orientation guides — `evlek://guides/neighborhood-personas`, `evlek://guides/universities`.
-- **Widget resources (3):** `ui://evlek/listing-cards-v3-2.html`, `ui://evlek/listing-detail-v3-2.html`, `ui://evlek/price-index-v3-2.html` — see "Interactive widgets" above.
+- **Widget resources (3):** `ui://evlek/listing-cards-v3-3.html`, `ui://evlek/listing-detail-v3-3.html`, `ui://evlek/price-index-v3-3.html` — see "Interactive widgets" above.
 
 ### Renamed tools in 3.0.0 (deprecated aliases)
 
@@ -249,7 +249,7 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 3.0.2
+- **MCP version:** 3.0.3 (live)
 - **Protocol:** 2026-07-28
 - **Primitives:** 8 tools · 9 data resources + 3 interactive widget resources · 2 resource templates · 2 prompts
 - **Auth:** none (public read-only)
