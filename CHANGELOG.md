@@ -12,6 +12,29 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.1.0 (2026-10-11)
+
+Synced to the live server contract of Evlak-Emlak 3.1.0 (main d4b4956f4, `pnpm mcp:export-public`).
+
+Tool names, titles, descriptions, input schemas, output schemas and annotations are unchanged (all 8 tools, byte for byte
+against 3.0.3); no tool was added or removed. What changed is the widget layer:
+
+- **Full-screen map in the listing cards (ChatGPT).** A ChatGPT `search_listings` / `search` answer with listings carries a
+  map summary in `_meta["evlek/widget"].map` (every match: semt areas with counts and price ranges, up to 300 approximate
+  points; never in `structuredContent` or `content`, never the private pin). The cards widget shows "Show on map", which
+  opens a full-screen map (list + map on a desktop, map + bottom sheet on a phone) with semt chips, grouped markers per
+  zoom level and a mini card per listing. Other clients are unchanged.
+- **ChatGPT sandbox fixes.** MapLibre's worker now runs from a `blob:` URL (ChatGPT allows workers only from `blob:`);
+  a base map that still cannot load shows a warning instead of an empty map. The map opens in ChatGPT's full-screen panel
+  (a new iframe) by itself, refits when the panel is widened, and a map that cannot load hides its button instead of
+  leaving an error note.
+- **Template URI rule.** Widget URIs: cards and detail `-v3-5`, price index `-v3-4` (the `-v3-3` and older URIs keep
+  answering with the current content). A widget's content never changes under a URI it was published with: a host caches
+  a template by URI, and ChatGPT kept showing an old cards template after its content had changed under `-v3-4`. A changed
+  widget gets a new URI; the server enforces this with a content-hash lock.
+- `tools.json`: only `_meta.ui.resourceUri` / `openai/outputTemplate` of `search_listings`, `search`, `fetch`,
+  `get_listing` and `market_stats` changed (the URIs above).
+
 ## 3.0.3 (2026-10-10)
 
 Synced to the live server contract of Evlak-Emlak 3.0.3 (main e26a68340, `pnpm mcp:export-public`).

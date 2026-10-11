@@ -1030,13 +1030,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-3.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-5.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-3.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-5.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready."
     }
@@ -2256,13 +2256,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-3.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-5.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-3.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-5.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready."
     }
@@ -2848,13 +2848,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-3.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-5.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-3.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-5.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded."
     }
@@ -3658,13 +3658,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-3.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-5.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-3.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-5.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded."
     }
@@ -4441,13 +4441,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/price-index-v3-3.html",
+        "resourceUri": "ui://evlek/price-index-v3-4.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/price-index-v3-3.html",
+      "openai/outputTemplate": "ui://evlek/price-index-v3-4.html",
       "openai/toolInvocation/invoking": "Building market statistics…",
       "openai/toolInvocation/invoked": "Market statistics ready."
     }
