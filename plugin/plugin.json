@@ -1,0 +1,107 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "evlek",
+  "version": "3.1.4",
+  "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data from evlek.app. Read-only, 8 tools.",
+  "author": {
+    "name": "Evlek",
+    "email": "hello@evlek.app",
+    "url": "https://evlek.app"
+  },
+  "homepage": "https://evlek.app/mcp",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Evlek",
+        "shortDescription": "Northern Cyprus property data",
+        "longDescription": "Evlek brings live Northern Cyprus (KKTC/TRNC) property listings into ChatGPT. Ask in Turkish, English, Russian, German or Arabic and Evlek shows matching homes for sale and long-term rent as cards with their real photos; in ChatGPT a \"Show on map\" button opens a full-screen map of every match, grouped by neighbourhood.\n\nYou can open any listing for its price, rooms, built and plot area, approximate location, features and a link to the listing on evlek.app, compare two to four listings side by side, see asking-price statistics for a city or district (medians, price per m² and listing counts), list the places Evlek knows, and convert an amount between GBP, EUR, USD and TRY at the rates Evlek stores.\n\nAll tools are read-only and need no account. Evlek reports advertised asking prices and listing facts only: it gives no valuation, forecast, ranking, investment, legal, title or tax advice, does not cover holiday rentals, and never includes contact details — the user is sent to the listing page on evlek.app. A gross area is always labelled as gross and never gets a price per m².",
+        "developerName": "Evlek",
+        "category": "Data & Analytics",
+        "capabilities": [
+          "Property search",
+          "Listing details",
+          "Listing comparison",
+          "Market statistics",
+          "Currency conversion"
+        ],
+        "websiteURL": "https://evlek.app",
+        "supportURL": "https://evlek.app/contact",
+        "privacyPolicyURL": "https://evlek.app/legal/privacy",
+        "termsOfServiceURL": "https://evlek.app/legal/terms",
+        "defaultPrompt": [
+          "Show me apartments for sale in Kyrenia under £300,000.",
+          "What are the median asking prices for apartments for sale in Kyrenia?",
+          "Compare EVL-101366 and EVL-101348."
+        ],
+        "brandColor": "#0A2540",
+        "brandColorDark": "#3FA796",
+        "composerIcon": "./assets/icon.png",
+        "composerIconDark": "./assets/icon-dark.png",
+        "logo": "./assets/logo.png",
+        "logoDark": "./assets/logo-dark.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Search: sale listings in one city under a price ceiling, shown as photo cards.",
+              "prompt": "Show me apartments for sale in Kyrenia under £300,000.",
+              "tools_triggered": "search_listings",
+              "expected_behavior": "Calls search_listings with transaction sale, city Kyrenia, propertyType apartment, priceMax 300000, locale en. The listing-cards widget shows photo cards (price, rooms, district, area; a gross area reads \"… m² (gross)\" with no price per m²) and a \"Show on map\" button. The reply is at most 2 sentences (number of matches and the price range); it does not restate the listings or add outside images."
+            },
+            {
+              "description": "Listing detail by listing number, including a gross area.",
+              "prompt": "Show me listing EVL-101366.",
+              "tools_triggered": "get_listing",
+              "expected_behavior": "Calls get_listing with ref EVL-101366, locale en. The listing-detail widget shows the photo gallery, GBP 153,000, a 2+1 apartment in Girne Merkez (Kyrenia) and \"Gross area · 85 m² (gross)\", with no price per m². The reply is at most 2 sentences; it never calls the area indoor, net or living area and gives no contact details."
+            },
+            {
+              "description": "Asking-price statistics for a city (market_stats).",
+              "prompt": "What are the median asking prices for apartments for sale in Kyrenia?",
+              "tools_triggered": "market_stats",
+              "expected_behavior": "Calls market_stats with city Kyrenia, transaction sale, propertyType apartment, locale en. The price-index widget shows the median price, median price per m², the active-listing count and the sample size, with district rows (districts below 10 sampled listings are withheld). The reply is at most 2 sentences, says these are asking prices (not sale prices or valuations) and does not rebuild the table."
+            },
+            {
+              "description": "Side-by-side comparison of two listings.",
+              "prompt": "Compare EVL-101366 and EVL-101348.",
+              "tools_triggered": "compare_listings",
+              "expected_behavior": "Calls compare_listings with ids EVL-101366 and EVL-101348, locale en. Returns a table: price, room layout, bathrooms, a \"Gross area\" row (85 m² / 85 m²) with no price-per-m² row, location, furnishing, features, office and listing date, plus descriptive facts (lowest price). The reply does not rank the listings, recommend one or say which is better."
+            },
+            {
+              "description": "Currency conversion at the rates Evlek stores.",
+              "prompt": "Convert £250,000 to euros, dollars and Turkish lira.",
+              "tools_triggered": "convert_currency",
+              "expected_behavior": "Calls convert_currency with amount 250000, currency GBP, locale en. Returns the GBP, EUR, USD and TRY equivalents with the rate source and update time, and states it is a currency conversion only (no payment plan, tax or fee estimate)."
+            }
+          ],
+          "negative": [
+            {
+              "description": "A listing number that does not exist: no invented listing.",
+              "prompt": "Show me listing EVL-999999.",
+              "tools_triggered": "get_listing",
+              "expected_behavior": "Calls get_listing with ref EVL-999999. The answer is found:false with code NOT_FOUND (not an error); the widget says \"This listing is no longer available.\" in the answer language. The reply says the listing was not found and suggests a search; it invents no price, photo or feature."
+            },
+            {
+              "description": "A place outside Northern Cyprus: no listings from elsewhere.",
+              "prompt": "Show me apartments for sale in Paris.",
+              "tools_triggered": "search_listings",
+              "expected_behavior": "Calls search_listings with city Paris (or list_locations first). The answer has 0 results and code INVALID_LOCATION with suggestions; the widget says \"That place was not found in Northern Cyprus.\" The reply says Evlek covers Northern Cyprus only and does not invent listings or use data from other countries."
+            },
+            {
+              "description": "A valuation or investment question: no valuation, forecast or advice.",
+              "prompt": "Is EVL-101366 a good investment? What is it really worth, and will its price go up?",
+              "tools_triggered": "get_listing, market_stats",
+              "expected_behavior": "May call get_listing (EVL-101366) and market_stats (Kyrenia, sale, apartment). Reports the listing facts and, if asked, the district asking-price medians labelled as asking prices. It gives no valuation, price forecast, \"fair / cheap / bargain\" judgement or buy/sell advice, derives no price per m² from the gross area, and suggests an independent valuation."
+            }
+          ]
+        },
+        "demo_recording_url": "",
+        "commerce": false,
+        "commerce_description": "Evlek does not sell products or process payments. It shows public property listings and asking-price data; buyers and renters contact the listing office through evlek.app."
+      },
+      "publication": {
+        "release_notes": "3.1.4: every area says its basis (\"85 m² (gross)\" / \"Gross area\"; a gross area is never called indoor and gets no price per m²); the widgets ask for at most 2 sentences and are not restated; no ranking, recommendation or valuation in listing, comparison and market answers; not-found and unknown-place messages follow the answer language; map labels near the edge keep their names."
+      }
+    }
+  }
+}
