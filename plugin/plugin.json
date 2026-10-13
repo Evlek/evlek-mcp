@@ -100,7 +100,7 @@
         "commerce_description": "Evlek does not sell products or process payments. It shows public property listings and asking-price data; buyers and renters contact the listing office through evlek.app."
       },
       "publication": {
-        "release_notes": "3.1.4: every area says its basis (\"85 m² (gross)\" / \"Gross area\"; a gross area is never called indoor and gets no price per m²); the widgets ask for at most 2 sentences and are not restated; no ranking, recommendation or valuation in listing, comparison and market answers; not-found and unknown-place messages follow the answer language; map labels near the edge keep their names."
+        "release_notes": "3.1.4: every area says its basis (\"85 m² (gross)\" / \"Gross area\"; a gross area is never called indoor and gets no price per m²); the widgets ask for at most 2 sentences and are not restated; no ranking, recommendation or valuation in listing, comparison and market answers; not-found and unknown-place messages follow the answer language."
       }
     }
   }
