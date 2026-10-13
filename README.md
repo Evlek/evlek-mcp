@@ -136,14 +136,15 @@ MCP Apps-capable hosts (Claude web/desktop) render inline in the conversation:
 
 | Tool | Widget | What you get |
 |---|---|---|
-| `search_listings`, `search` | `ui://evlek/listing-cards-v3-5.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view; in ChatGPT, "Show on map" opens a full-screen map of every match |
-| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-5.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
-| `market_stats` | `ui://evlek/price-index-v3-4.html` | Asking-price statistics per city / district |
+| `search_listings`, `search` | `ui://evlek/listing-cards-v3-10.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view; in ChatGPT, "Show on map" opens a full-screen map of every match |
+| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-7.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
+| `market_stats` | `ui://evlek/price-index-v3-5.html` | Asking-price statistics per city / district |
 
 `compare_listings`, `list_locations` and `convert_currency` have no widget. The
 widget URIs moved from `-v2` to `-v3` in 3.0.0 so a host never serves a cached
 v2 template against v3 data. 3.0.1 moved them to `-v3-1`, 3.0.2 to `-v3-2`, 3.0.3 to `-v3-3` and 3.1.0 to `-v3-4`
-(cards and detail then `-v3-5`); the older v3 URIs keep answering with the current content. Rule since 3.1.0: a widget's
+(cards and detail then `-v3-5`); 3.1.3 serves cards `-v3-10`, detail `-v3-7` and price index `-v3-5`. The older v3 URIs keep
+answering with the current content. Rule since 3.1.0: a widget's
 content never changes under a URI it was published with (a host caches a template by URI), so a changed widget gets a new URI.
 
 In ChatGPT (3.0.2, `search` since 3.0.3) the listing data reaches the widget through the result `_meta["evlek/widget"]`,
@@ -163,7 +164,7 @@ See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and respon
 
 - **Templates (2):** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
 - **Data resources (9):** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), a sample district profile (Girne/Alsancak), and 2 orientation guides — `evlek://guides/neighborhood-personas`, `evlek://guides/universities`.
-- **Widget resources (3):** `ui://evlek/listing-cards-v3-5.html`, `ui://evlek/listing-detail-v3-5.html`, `ui://evlek/price-index-v3-4.html` — see "Interactive widgets" above.
+- **Widget resources (3):** `ui://evlek/listing-cards-v3-10.html`, `ui://evlek/listing-detail-v3-7.html`, `ui://evlek/price-index-v3-5.html` — see "Interactive widgets" above.
 
 ### Renamed tools in 3.0.0 (deprecated aliases)
 
@@ -250,7 +251,7 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 3.1.0 (live)
+- **MCP version:** 3.1.3 (live)
 - **Protocol:** 2026-07-28
 - **Primitives:** 8 tools · 9 data resources + 3 interactive widget resources · 2 resource templates · 2 prompts
 - **Auth:** none (public read-only)

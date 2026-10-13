@@ -12,6 +12,32 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.1.3 (2026-10-13)
+
+Synced to the live server contract of Evlak-Emlak 3.1.3 (main f37340ef5, `pnpm mcp:export-public`; `tools.json` equals the
+live `tools/list`). The hosted service went 3.1.1 → 3.1.2 → 3.1.3 without a package release in between; this entry covers all
+three.
+
+Tool names, titles, descriptions, input schemas and annotations are unchanged; no tool was added or removed. The output schemas
+gain fields only (nothing removed or renamed):
+
+- **Area truth (3.1.2–3.1.3).** `search_listings`, `search`, `get_listing`, `fetch` and `compare_listings` carry `areaBasis` /
+  `area.basis`: `net` only when the listing stated a net area, `gross` for a gross one, `null` when not stated (also land and a
+  withheld built area). A gross area is named as such ("Gross area" / "Brüt alan" / "Площадь брутто" / "Bruttofläche" /
+  "المساحة الإجمالية") and never gets a price per m²; `perSqmGbp` / `pricePerSqmGbp` / `areaSqm` / `closedM2` descriptions
+  say the listing page's own rule. `compare_listings` shows a gross area in its own row. `get_listing` photo tags leave in the
+  answer language. Güzelyurt is the display name ("Morphou" stays an input alias).
+- **Full-screen map in ChatGPT, reliability (3.1.1–3.1.3).** The base map watchdog no longer gives false alarms: it counts only
+  rendered time (a panel still opening, hidden or in a background tab draws no frames), retries before warning, never takes the
+  base map away, and clears the warning when tiles arrive. A second "Show on map" in ChatGPT's panel opens the map again. Each
+  opening sends one diagnostics report (`map_diag`, no personal data) once the map really draws; a map opened in a background
+  tab is redrawn when the tab comes back.
+- **Widget URIs:** cards `ui://evlek/listing-cards-v3-10.html`, detail `ui://evlek/listing-detail-v3-7.html`, price index
+  `ui://evlek/price-index-v3-5.html` (older v3 URIs keep answering with the current content). A widget's content never changes
+  under a URI it was published with.
+- `tools.json`: `outputSchema` (the fields above) and `_meta` (the URIs above) of `search_listings`, `search`, `fetch`,
+  `get_listing`, `compare_listings` and `market_stats`.
+
 ## 3.1.0 (2026-10-11)
 
 Synced to the live server contract of Evlak-Emlak 3.1.0 (main d4b4956f4, `pnpm mcp:export-public`).

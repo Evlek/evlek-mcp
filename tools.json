@@ -538,6 +538,13 @@
                   "null"
                 ]
               },
+              "areaBasis": {
+                "enum": [
+                  "net",
+                  "gross",
+                  null
+                ]
+              },
               "plotM2": {
                 "type": [
                   "number",
@@ -1030,13 +1037,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-5.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-10.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-5.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-10.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready."
     }
@@ -1323,6 +1330,13 @@
                 "type": [
                   "number",
                   "null"
+                ]
+              },
+              "areaBasis": {
+                "enum": [
+                  "net",
+                  "gross",
+                  null
                 ]
               },
               "plotM2": {
@@ -2110,6 +2124,13 @@
                       "null"
                     ]
                   },
+                  "areaBasis": {
+                    "enum": [
+                      "net",
+                      "gross",
+                      null
+                    ]
+                  },
                   "plotM2": {
                     "type": [
                       "number",
@@ -2256,13 +2277,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-5.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-10.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-5.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-10.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready."
     }
@@ -2346,7 +2367,8 @@
                   "type": [
                     "number",
                     "null"
-                  ]
+                  ],
+                  "description": "GBP per m², by the listing page's own rule: null whenever the built area is flagged suspect, withheld, or gross (areaBasis 'gross'), and on land below 150 m²."
                 },
                 "rentPeriod": {
                   "type": [
@@ -2414,6 +2436,18 @@
                     "number",
                     "null"
                   ]
+                },
+                "basis": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "net",
+                    "gross",
+                    null
+                  ],
+                  "description": "'gross' when closedM2 is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
                 },
                 "suspect": {
                   "type": "boolean"
@@ -2659,6 +2693,13 @@
                 "null"
               ]
             },
+            "areaBasis": {
+              "enum": [
+                "net",
+                "gross",
+                null
+              ]
+            },
             "plotM2": {
               "type": [
                 "number",
@@ -2848,13 +2889,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-5.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-7.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-5.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-7.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded."
     }
@@ -3021,7 +3062,7 @@
                 "number",
                 "null"
               ],
-              "description": "Null whenever the built area is flagged suspect."
+              "description": "GBP per m², by the listing page's own rule: null whenever the built area is flagged suspect, withheld, or gross (areaBasis 'gross'), and on land below 150 m²."
             },
             "rentPeriod": {
               "type": [
@@ -3074,13 +3115,26 @@
               "type": [
                 "number",
                 "null"
-              ]
+              ],
+              "description": "The BUILT area in m², as the listing page shows it: null on land (see area.plotM2) and when the page withholds the figure (a plot-looking number on a small home, a closed area too small for its rooms); otherwise shown even when area.suspect is true. A gross figure says so in area.basis."
             },
             "plotM2": {
               "type": [
                 "number",
                 "null"
               ]
+            },
+            "basis": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "net",
+                "gross",
+                null
+              ],
+              "description": "'gross' when closedM2 is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
             },
             "suspect": {
               "type": "boolean"
@@ -3393,7 +3447,7 @@
             "number",
             "null"
           ],
-          "description": "Null whenever the built area is flagged suspect."
+          "description": "GBP per m², by the listing page's own rule: null whenever the built area is flagged suspect, withheld, or gross (areaBasis 'gross'), and on land below 150 m²."
         },
         "monthlyRentGbp": {
           "type": [
@@ -3430,7 +3484,19 @@
             "number",
             "null"
           ],
-          "description": "The BUILT area in m²; null on land (see plotM2). The number is shown even when areaSuspect is true."
+          "description": "The BUILT area in m², as the listing page shows it: null on land (see plotM2) and when the page withholds the figure (a plot-looking number on a small home, a closed area too small for its rooms); otherwise shown even when areaSuspect is true. A gross figure says so in areaBasis."
+        },
+        "areaBasis": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "net",
+            "gross",
+            null
+          ],
+          "description": "'gross' when areaSqm is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
         },
         "plotM2": {
           "type": [
@@ -3658,13 +3724,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-5.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-7.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-5.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-7.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded."
     }
@@ -3815,7 +3881,7 @@
                   "number",
                   "null"
                 ],
-                "description": "GBP per m²; null whenever the built area is flagged suspect."
+                "description": "GBP per m², by the listing page's own rule: null whenever the built area is flagged suspect, withheld, or gross (areaBasis 'gross'), and on land below 150 m²."
               },
               "rentPeriod": {
                 "type": [
@@ -3886,7 +3952,19 @@
                   "number",
                   "null"
                 ],
-                "description": "The BUILT area in m²; null on land (see plotM2). Shown even when areaSuspect is true."
+                "description": "The BUILT area in m², as the listing page shows it: null on land (see plotM2) and when the page withholds the figure (a plot-looking number on a small home, a closed area too small for its rooms); otherwise shown even when areaSuspect is true. A gross figure says so in areaBasis."
+              },
+              "areaBasis": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "net",
+                  "gross",
+                  null
+                ],
+                "description": "'gross' when areaSqm is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
               },
               "plotM2": {
                 "type": [
@@ -4441,13 +4519,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/price-index-v3-4.html",
+        "resourceUri": "ui://evlek/price-index-v3-5.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/price-index-v3-4.html",
+      "openai/outputTemplate": "ui://evlek/price-index-v3-5.html",
       "openai/toolInvocation/invoking": "Building market statistics…",
       "openai/toolInvocation/invoked": "Market statistics ready."
     }
