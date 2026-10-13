@@ -12,6 +12,30 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.1.4 (2026-10-13)
+
+Synced to the live server contract of Evlak-Emlak 3.1.4 (main 8b7c00c3d, #913, `pnpm mcp:export-public`; `tools.json` equals
+the live `tools/list`). Guidance to the model after a live ChatGPT test.
+
+Tool names, titles, descriptions, input schemas and annotations are unchanged; no tool was added or removed. The output schemas
+gain fields only (nothing removed or renamed):
+
+- **The area says its basis.** `get_listing` and `fetch` carry `area.text` / `area.label`; the listing cards of
+  `search_listings` / `search` and the `compare_listings` rows carry `areaText` / `areaLabel`: "85 m² (gross)" + "Gross area",
+  "85 m² (net)" + "Net area", "85 m²" + "Area" when the basis is not stated, the plot + "Plot area" on land. `closedM2` and the
+  land-unit `area.display` are unchanged. A text about a gross area tells the model never to call it indoor, net or living area.
+- **No restating, no advice.** The widget descriptions (`openai/widgetDescription`, now also in the tool `_meta` of the five
+  widget-bound tools) ask for at most 2 sentences without restating the widget; `compare_listings`, `get_listing` and
+  `market_stats` texts say not to rank, recommend, judge a price or estimate a value.
+- **Widget language.** Not-found, unknown-place, out-of-scope and error answers of `search_listings`, `get_listing` and
+  `market_stats` carry `locale`, so the widgets write those lines in the answer language.
+- **Map.** A neighbourhood label near the map edge moves inwards before it folds to a bare count (map module
+  `evlek-map-v3-11.js`).
+- **Widget URIs:** cards `ui://evlek/listing-cards-v3-11.html`, detail `ui://evlek/listing-detail-v3-8.html`, price index
+  `ui://evlek/price-index-v3-6.html` (older v3 URIs keep answering with the current content).
+- `tools.json`: `outputSchema` (the fields above) and `_meta` (`openai/widgetDescription`, the URIs above) of `search_listings`,
+  `search`, `fetch`, `get_listing`, `compare_listings` and `market_stats`.
+
 ## 3.1.3 (2026-10-13)
 
 Synced to the live server contract of Evlak-Emlak 3.1.3 (main f37340ef5, `pnpm mcp:export-public`; `tools.json` equals the

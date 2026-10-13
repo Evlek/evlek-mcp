@@ -545,6 +545,18 @@
                   null
                 ]
               },
+              "areaText": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "areaLabel": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
               "plotM2": {
                 "type": [
                   "number",
@@ -1037,15 +1049,16 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-10.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-11.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-10.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-11.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
-      "openai/toolInvocation/invoked": "Listings ready."
+      "openai/toolInvocation/invoked": "Listings ready.",
+      "openai/widgetDescription": "The widget already shows the listings; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search. If the user asks about one listing, call get_listing with its listing number."
     }
   },
   {
@@ -1337,6 +1350,18 @@
                   "net",
                   "gross",
                   null
+                ]
+              },
+              "areaText": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "areaLabel": {
+                "type": [
+                  "string",
+                  "null"
                 ]
               },
               "plotM2": {
@@ -2131,6 +2156,18 @@
                       null
                     ]
                   },
+                  "areaText": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "areaLabel": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
                   "plotM2": {
                     "type": [
                       "number",
@@ -2277,15 +2314,16 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-10.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-11.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-10.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-11.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
-      "openai/toolInvocation/invoked": "Listings ready."
+      "openai/toolInvocation/invoked": "Listings ready.",
+      "openai/widgetDescription": "The widget already shows the listings; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search. If the user asks about one listing, call get_listing with its listing number."
     }
   },
   {
@@ -2457,6 +2495,18 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "text": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
                 }
               }
             },
@@ -2700,6 +2750,18 @@
                 null
               ]
             },
+            "areaText": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "areaLabel": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
             "plotM2": {
               "type": [
                 "number",
@@ -2889,15 +2951,16 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-7.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-8.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-7.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-8.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
-      "openai/toolInvocation/invoked": "Listing loaded."
+      "openai/toolInvocation/invoked": "Listing loaded.",
+      "openai/widgetDescription": "The widget already shows the listing details; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search."
     }
   },
   {
@@ -3144,6 +3207,20 @@
               "items": {
                 "type": "string"
               }
+            },
+            "text": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The area as printed: \"85 m² (gross)\", \"85 m² (net)\", \"85 m²\" when the basis is not stated; on land the plot."
+            },
+            "label": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Its name: 'Gross area', 'Net area', 'Area' (basis not stated), 'Plot area' (land). Never call a gross area indoor, net or living area."
             },
             "display": {
               "type": [
@@ -3498,6 +3575,18 @@
           ],
           "description": "'gross' when areaSqm is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
         },
+        "areaText": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "areaLabel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "plotM2": {
           "type": [
             "number",
@@ -3724,15 +3813,16 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-7.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-8.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-7.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-8.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
-      "openai/toolInvocation/invoked": "Listing loaded."
+      "openai/toolInvocation/invoked": "Listing loaded.",
+      "openai/widgetDescription": "The widget already shows the listing details; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search."
     }
   },
   {
@@ -3965,6 +4055,18 @@
                   null
                 ],
                 "description": "'gross' when areaSqm is a gross figure (not the indoor area; no price per m² is derived from it); 'net' only when the publisher stated the area is net (Evlek does not measure it); null when the basis is not stated, or there is no built area."
+              },
+              "areaText": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "areaLabel": {
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "plotM2": {
                 "type": [
@@ -4519,15 +4621,16 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/price-index-v3-5.html",
+        "resourceUri": "ui://evlek/price-index-v3-6.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/price-index-v3-5.html",
+      "openai/outputTemplate": "ui://evlek/price-index-v3-6.html",
       "openai/toolInvocation/invoking": "Building market statistics…",
-      "openai/toolInvocation/invoked": "Market statistics ready."
+      "openai/toolInvocation/invoked": "Market statistics ready.",
+      "openai/widgetDescription": "The widget already shows the table; reply in at most 2 sentences and do not restate it. These are asking prices of live listings, not sale prices. Do not show technical codes."
     }
   },
   {
