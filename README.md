@@ -1,5 +1,7 @@
 # Evlek MCP Server
 
+Evlek is the Northern Cyprus property portal: [Northern Cyprus property listings](https://evlek.app) for sale and long-term rent, an [asking-price index](https://evlek.app/en/fiyat-endeksi) by city and district, and this MCP server (see the [MCP documentation](https://evlek.app/mcp)).
+
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-7B61FF?style=flat-square)](https://modelcontextprotocol.io)
 [![Hosted](https://img.shields.io/badge/Hosted-evlek.app-0A2540?style=flat-square)](https://evlek.app/api/mcp)
 [![License](https://img.shields.io/badge/License-MIT-2D8B5C?style=flat-square)](LICENSE)
@@ -24,6 +26,39 @@ This repository is MIT-licensed for the public manifest, documentation, examples
 - **Verification-aware listings.** Evlek surfaces listing and account verification context where available, and the MCP omits contact fields to preserve Evlek's reveal/contact funnel.
 - **Built for the region.** Optimized for the 6 cities of North Cyprus (Lefkoşa, Girne, Gazimağusa, İskele, Güzelyurt, Lefke) and 100+ districts.
 - **Production-grade.** OWASP MCP Top 10 aligned — Zod input validation, output sanitization, rate limiting (60/min/IP, 500/min global), Sentry observability.
+
+---
+
+## Add Evlek to ChatGPT, Claude or your MCP client
+
+The server URL is `https://evlek.app/api/mcp`. No sign-in, no API key.
+
+**ChatGPT**
+
+1. Settings → Apps & Connectors → Advanced settings: turn on developer mode.
+2. Back in Apps & Connectors, choose Create.
+3. Name: `Evlek`. MCP server URL: `https://evlek.app/api/mcp`. Authentication: none.
+4. In a new chat, pick Evlek from the tools menu and ask, for example, *"2-bedroom flats for rent in Girne"*.
+
+**Claude (web and desktop)**
+
+1. Settings → Connectors → Add custom connector.
+2. Name: `Evlek`. URL: `https://evlek.app/api/mcp`.
+3. In a chat, turn Evlek on from the tools menu.
+
+**Claude Code**
+
+```bash
+claude mcp add --transport http evlek https://evlek.app/api/mcp
+```
+
+**MCP Registry**
+
+Evlek is in the official [MCP Registry](https://registry.modelcontextprotocol.io) as `app.evlek/mcp-server`
+([registry entry](https://registry.modelcontextprotocol.io/v0/servers?search=app.evlek/mcp-server&version=latest)).
+Clients that install from the registry find it under that name; the entry points at the same URL.
+
+More options (Cursor, VS Code, stdio) are under [Quick start](#quick-start) and on the [MCP documentation](https://evlek.app/mcp) page.
 
 ---
 
@@ -136,14 +171,14 @@ MCP Apps-capable hosts (Claude web/desktop) render inline in the conversation:
 
 | Tool | Widget | What you get |
 |---|---|---|
-| `search_listings`, `search` | `ui://evlek/listing-cards-v3-13.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view; in ChatGPT, "Show on map" opens a full-screen map of every match |
-| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-10.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
-| `market_stats` | `ui://evlek/price-index-v3-8.html` | Asking-price statistics per city / district |
+| `search_listings`, `search` | `ui://evlek/listing-cards-v3-14.html` | Listing cards (cover photo, price, location); opening one shows the listing detail view; in ChatGPT, "Show on map" opens a full-screen map of every match |
+| `get_listing`, `fetch` | `ui://evlek/listing-detail-v3-11.html` | Photo gallery, spec sheet, and AI virtual-staging before/after (always AI-disclosed) |
+| `market_stats` | `ui://evlek/price-index-v3-9.html` | Asking-price statistics per city / district |
 
 `compare_listings`, `list_locations` and `convert_currency` have no widget. The
 widget URIs moved from `-v2` to `-v3` in 3.0.0 so a host never serves a cached
 v2 template against v3 data. 3.0.1 moved them to `-v3-1`, 3.0.2 to `-v3-2`, 3.0.3 to `-v3-3` and 3.1.0 to `-v3-4`
-(cards and detail then `-v3-5`); 3.1.4 served cards `-v3-11`, detail `-v3-8` and price index `-v3-6`; 3.2.1 serves cards `-v3-13`, detail `-v3-10` and price index `-v3-8`. The older v3 URIs keep
+(cards and detail then `-v3-5`); 3.1.4 served cards `-v3-11`, detail `-v3-8` and price index `-v3-6`; 3.2.1 served cards `-v3-13`, detail `-v3-10` and price index `-v3-8`; 3.2.2 serves cards `-v3-14`, detail `-v3-11` and price index `-v3-9`. The older v3 URIs keep
 answering with the current content. Rule since 3.1.0: a widget's
 content never changes under a URI it was published with (a host caches a template by URI), so a changed widget gets a new URI.
 
@@ -164,7 +199,7 @@ See [TOOLS.md](./TOOLS.md) for full input schemas, parameter details, and respon
 
 - **Templates (2):** `evlek://price-index/{city}` · `evlek://district/{city}/{district}`
 - **Data resources (9):** per-city price indexes (girne, iskele, lefkosa, gazimagusa, guzelyurt, lefke), a sample district profile (Girne/Alsancak), and 2 orientation guides — `evlek://guides/neighborhood-personas`, `evlek://guides/universities`.
-- **Widget resources (3):** `ui://evlek/listing-cards-v3-13.html`, `ui://evlek/listing-detail-v3-10.html`, `ui://evlek/price-index-v3-8.html` — see "Interactive widgets" above.
+- **Widget resources (3):** `ui://evlek/listing-cards-v3-14.html`, `ui://evlek/listing-detail-v3-11.html`, `ui://evlek/price-index-v3-9.html` — see "Interactive widgets" above.
 
 ### Renamed tools in 3.0.0 (deprecated aliases)
 
@@ -237,6 +272,7 @@ This repository contains:
 ### Sözleşme dosyaları (contract files)
 
 - `tools.json` and `TOOLS.md` are a projection of the live server, generated by `pnpm mcp:export-public` in the source repo and copied here verbatim. Never hand-edit them; the `Contract Drift` workflow compares `tools.json` against the live `tools/list` daily and on every PR.
+- The `Live Sync` workflow (`.github/workflows/live-sync.yml`, daily) reads the live server and, when it differs from this repo, opens one PR with `tools.json`, the versions, the README tools table and widget URIs (`scripts/sync-from-live.mjs`). It never merges, tags or publishes.
 - `server.json` is **not** that projection. It is the MCP Registry publish manifest and must keep the registry shape: `name` is `app.evlek/mcp-server` (pattern `^[a-zA-Z0-9.-]+/[a-zA-Z0-9._-]+$`) and `description` is at most 100 characters. A sync only updates its `version`, the tool count in `description`, and the `_meta` tool list. (Copying the export's own `server.json` here is what failed the v2.1.0 registry publish.)
 
 The full server implementation (database schemas, API routes, AI prompt engineering, listing pipeline) is hosted at [evlek.app](https://evlek.app) and remains proprietary.
@@ -251,7 +287,7 @@ To report a security issue, email hello@evlek.app.
 
 ## Status
 
-- **MCP version:** 3.2.1 (live)
+- **MCP version:** 3.2.2 (live)
 - **Protocol:** 2026-07-28
 - **Primitives:** 8 tools · 9 data resources + 3 interactive widget resources · 2 resource templates · 2 prompts
 - **Auth:** none (public read-only)
