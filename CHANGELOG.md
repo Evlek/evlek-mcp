@@ -12,6 +12,21 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.2.1 (2026-10-30)
+
+Synced to the live server contract of Evlak-Emlak 3.2.1 (main 9bf6d27bb, #1026, `pnpm mcp:export-public`; `tools.json` equals
+the live `tools/list`). Covers the hosted 3.2.0 (#1023) and 3.2.1 (#1026) releases.
+
+Tool names, titles, input schemas and annotations are unchanged; no tool was added or removed.
+
+- **Descriptions name no other tool.** `search`, `fetch`, `search_listings` and `list_locations` no longer point the model at
+  another tool; `search` and `fetch` describe themselves as the OpenAI deep-research compatible format.
+- **Output schema wording.** Three `get_listing` field descriptions say "Short summary" instead of "ChatGPT summary"; no
+  field was added, removed or renamed.
+- **Widgets rebuilt** (cards, detail, market). Widget URIs move to cards `-v3-13`, detail `-v3-10` and price index `-v3-8`;
+  the older v3 URIs keep answering with the current content.
+- `server.json` version 3.2.1; tool count and tool list unchanged.
+
 ## 3.1.4 (2026-10-13)
 
 Synced to the live server contract of Evlak-Emlak 3.1.4 (main 8b7c00c3d, #913, `pnpm mcp:export-public`; `tools.json` equals
