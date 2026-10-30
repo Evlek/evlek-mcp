@@ -2,7 +2,7 @@
   {
     "name": "search_listings",
     "title": "Search Northern Cyprus property listings",
-    "description": "Use this when the user wants to find or see property listings; results are shown with real photos in the Evlek widget. Search live Evlek property listings for sale and long-term rent in Northern Cyprus (KKTC/TRNC; prices in GBP unless a currency is given; 2+1 means bedrooms 2) with structured filters: transaction, city, district, property type, bedrooms, price, areas, amenities, nearby university. Pass the user's language as `locale` (tr|en|ru|de|ar): the text, amenity names, number formats and links follow it. Returns at most 10 listings per call, each as one readable line (type, place, price, rooms, area, a deterministic sentence, data notes, canonical link) plus a structured card; continue with the `nextCursor` of a group. Without `transaction`, listings for sale and for rent come as two separate groups, each with its own cursor that is only valid together with that group's transaction. Place names in any language are resolved; an unknown place returns suggestions instead of results. An amenity that cannot be filtered on is reported as not applied. For one listing use `get_listing`. Returns advertised asking-price and listing facts only: not a valuation, verification of property-specific claims, forecast, ranking or recommendation.",
+    "description": "Use this when the user wants to find or see property listings; results are shown with real photos in the Evlek widget. Search live Evlek property listings for sale and long-term rent in Northern Cyprus (KKTC/TRNC; prices in GBP unless a currency is given; 2+1 means bedrooms 2) with structured filters: transaction, city, district, property type, bedrooms, price, areas, amenities, nearby university. Pass the user's language as `locale` (tr|en|ru|de|ar): the text, amenity names, number formats and links follow it. Returns at most 10 listings per call, each as one readable line (type, place, price, rooms, area, a deterministic sentence, data notes, canonical link) plus a structured card; continue with the `nextCursor` of a group. Without `transaction`, listings for sale and for rent come as two separate groups, each with its own cursor that is only valid together with that group's transaction. Place names in any language are resolved; an unknown place returns suggestions instead of results. An amenity that cannot be filtered on is reported as not applied. Returns advertised asking-price and listing facts only: not a valuation, verification of property-specific claims, forecast, ranking or recommendation.",
     "inputSchema": {
       "type": "object",
       "description": "Structured search over active Evlek property listings in Northern Cyprus (sale and long-term rent; holiday lets are not offered). Every field is optional; a listing must match ALL the fields you set. `transaction` is required when you filter or sort by price or page with `cursor`. At most 10 listings are returned per call; continue with `cursor`. Sort orders: newest = latest first (default), price-low = cheapest first, price-high = most expensive first, price-per-sqm-asc = lowest price per m², area-large / area-small = largest / smallest closed area, nearest-uni = closest to a university. Pass `locale` in the language the user writes in.",
@@ -1049,13 +1049,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-11.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-13.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-11.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-13.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready.",
       "openai/widgetDescription": "The widget already shows the listings; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search. If the user asks about one listing, call get_listing with its listing number."
@@ -1064,7 +1064,7 @@
   {
     "name": "search",
     "title": "Search Evlek property listings",
-    "description": "Use only for research and citation lookups (deep research). To show listings to the user, use search_listings instead. Search live Northern Cyprus (KKTC/TRNC) property listings on Evlek with a free-text query in Turkish, English, Russian, German or Arabic. Returns matching listings as id/title/url for the fetch tool, newest first (sale and rent as two groups when the query names neither). The answer language follows the language of the query. Same data as search_listings: this fixed form exists for the ChatGPT/OpenAI connector contract. Use when: the caller only has a free-text query (\"2+1 apartment in Kyrenia under 150000 pounds\", \"EVL-100464\"). Don't use for: structured filters, paging or another answer language: use search_listings.",
+    "description": "For research and citation lookups (deep research): free-text search of live Northern Cyprus (KKTC/TRNC) property listings on Evlek, in Turkish, English, Russian, German or Arabic. Returns matching listings as id/title/url, newest first (sale and rent as two groups when the query names neither). The answer language follows the language of the query. OpenAI deep-research compatible format, for research and citation clients. Use when: the caller only has a free-text query (\"2+1 apartment in Kyrenia under 150000 pounds\", \"EVL-100464\"). Not for: structured filters, paging or choosing the answer language.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -2314,13 +2314,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-cards-v3-11.html",
+        "resourceUri": "ui://evlek/listing-cards-v3-13.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-cards-v3-11.html",
+      "openai/outputTemplate": "ui://evlek/listing-cards-v3-13.html",
       "openai/toolInvocation/invoking": "Searching Evlek listings…",
       "openai/toolInvocation/invoked": "Listings ready.",
       "openai/widgetDescription": "The widget already shows the listings; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search. If the user asks about one listing, call get_listing with its listing number."
@@ -2329,7 +2329,7 @@
   {
     "name": "fetch",
     "title": "Fetch full Evlek listing detail",
-    "description": "Fetch the full detail of one Evlek listing: title, price, location, rooms, areas, amenities, data-quality notes and the canonical link. The id is the listing id (UUID) from a search result, a listing number such as EVL-100464, or an evlek.app listing link; the answer language follows the link (English otherwise). A listing that is not available (it does not exist, is not public, or was removed) always gets the same answer. Same data as get_listing: this fixed id-only form exists for the ChatGPT/OpenAI connector contract. Use when: an id from search is known. Don't use for: discovery (use search first) or another answer language (use get_listing).",
+    "description": "Fetch the full detail of one Evlek listing: title, price, location, rooms, areas, amenities, data-quality notes and the canonical link. The id is the listing id (UUID) from a search result, a listing number such as EVL-100464, or an evlek.app listing link; the answer language follows the link (English otherwise). A listing that is not available (it does not exist, is not public, or was removed) always gets the same answer. OpenAI deep-research compatible format, for research and citation clients. Use when: a listing id from a search result is known. Not for: discovering listings or choosing the answer language.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -2951,13 +2951,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-8.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-10.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-8.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-10.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded.",
       "openai/widgetDescription": "The widget already shows the listing details; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search."
@@ -3786,18 +3786,18 @@
             "string",
             "null"
           ],
-          "description": "ChatGPT summary: listing number."
+          "description": "Short summary: listing number."
         },
         "priceLabel": {
           "type": "string",
-          "description": "ChatGPT summary: printed price."
+          "description": "Short summary: printed price."
         },
         "agencyName": {
           "type": [
             "string",
             "null"
           ],
-          "description": "ChatGPT summary: office name."
+          "description": "Short summary: office name."
         }
       },
       "required": [
@@ -3813,13 +3813,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/listing-detail-v3-8.html",
+        "resourceUri": "ui://evlek/listing-detail-v3-10.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/listing-detail-v3-8.html",
+      "openai/outputTemplate": "ui://evlek/listing-detail-v3-10.html",
       "openai/toolInvocation/invoking": "Loading listing detail…",
       "openai/toolInvocation/invoked": "Listing loaded.",
       "openai/widgetDescription": "The widget already shows the listing details; reply in at most 2 sentences and do not restate them. Do not add images from other sources or web search."
@@ -4621,13 +4621,13 @@
     },
     "_meta": {
       "ui": {
-        "resourceUri": "ui://evlek/price-index-v3-6.html",
+        "resourceUri": "ui://evlek/price-index-v3-8.html",
         "visibility": [
           "model",
           "app"
         ]
       },
-      "openai/outputTemplate": "ui://evlek/price-index-v3-6.html",
+      "openai/outputTemplate": "ui://evlek/price-index-v3-8.html",
       "openai/toolInvocation/invoking": "Building market statistics…",
       "openai/toolInvocation/invoked": "Market statistics ready.",
       "openai/widgetDescription": "The widget already shows the table; reply in at most 2 sentences and do not restate it. These are asking prices of live listings, not sale prices. Do not show technical codes."
@@ -4636,7 +4636,7 @@
   {
     "name": "list_locations",
     "title": "List Evlek locations",
-    "description": "List the places Evlek knows in Northern Cyprus (6 cities, districts, villages, sub-areas, landmarks, the Karpaz region) with their public sale and long-term rent listing counts. Call it first when unsure how a place is spelled: every name and id returned is accepted by the other tools. Pass `city` (any spelling or language) for one place in detail. Names are Turkish or Latin; Russian, German and Arabic spellings are accepted as input but not listed.",
+    "description": "List the places Evlek knows in Northern Cyprus (6 cities, districts, villages, sub-areas, landmarks, the Karpaz region) with their public sale and long-term rent listing counts. Call it first when unsure how a place is spelled: every name and id returned is accepted as place input. Pass `city` (any spelling or language) for one place in detail. Names are Turkish or Latin; Russian, German and Arabic spellings are accepted as input but not listed.",
     "inputSchema": {
       "type": "object",
       "properties": {
