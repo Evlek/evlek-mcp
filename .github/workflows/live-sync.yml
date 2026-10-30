@@ -1,0 +1,95 @@
+# Keeps this repo from falling behind the hosted server again. Once a day it
+# reads the live https://evlek.app/api/mcp (initialize → version, tools/list,
+# resources/list) and runs scripts/sync-from-live.mjs. When anything differs it
+# pushes the update to the `auto/live-sync` branch and opens (or refreshes) one
+# PR against main.
+#
+# It never merges, tags or publishes: Onur merges the PR; the `v*` tag that
+# triggers registry-publish.yml stays a separate, approved step.
+#
+# The PR carries tools.json, versions, the README tools table and widget URIs.
+# TOOLS.md and the CHANGELOG entry still come from `pnpm mcp:export-public` in
+# the source repo — the PR body lists them as the remaining work.
+#
+# Prerequisite (repo setting, once): Settings → Actions → General → Workflow
+# permissions → "Allow GitHub Actions to create and approve pull requests".
+# Optional: a `SYNC_PR_TOKEN` secret (fine-grained PAT, contents + pull
+# requests: write on this repo). With it the PR also triggers the CI checks;
+# PRs opened with the default GITHUB_TOKEN do not start other workflows.
+
+name: Live Sync
+
+on:
+  schedule:
+    - cron: "41 5 * * *" # daily, after Contract Drift (05:17)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: live-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: auto/live-sync
+      GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+          token: ${{ secrets.SYNC_PR_TOKEN || github.token }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Sync from the live server
+        id: sync
+        run: |
+          if ! node scripts/sync-from-live.mjs; then
+            echo "::warning::evlek.app/api/mcp could not be read — live sync skipped, not failed."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open or update the sync PR
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          LIVE: ${{ steps.sync.outputs.live_version }}
+          REPO: ${{ steps.sync.outputs.repo_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -m "Sync to live $LIVE (automatic)" \
+            -m "Read from https://evlek.app/api/mcp by .github/workflows/live-sync.yml; tools.json equals the live tools/list."
+          git push --force origin "$BRANCH"
+
+          body=$(cat <<EOF
+          The live server answers **$LIVE**; this repo was at **$REPO**.
+
+          Done here (scripts/sync-from-live.mjs):
+          - \`tools.json\` = live \`tools/list\` (byte-identical projection)
+          - version in \`server.json\` (registry shape kept), \`package.json\`, \`package-lock.json\`, README status
+          - README tools table and \`ui://\` widget URIs
+
+          Still to do before merge:
+          - [ ] \`TOOLS.md\` from \`pnpm mcp:export-public\` (source repo main)
+          - [ ] \`CHANGELOG.md\` entry for $LIVE
+          - [ ] README prose that names versions (widget URI history)
+
+          After merge, with approval: tag \`v$LIVE\` → registry-publish.yml → check the registry.
+          EOF
+          )
+          title="Sync public contract to live $LIVE"
+          pr=$(gh pr list --head "$BRANCH" --base main --state open --json number -q '.[0].number')
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --title "$title" --body "$body"
+          else
+            gh pr create --head "$BRANCH" --base main --title "$title" --body "$body"
+          fi

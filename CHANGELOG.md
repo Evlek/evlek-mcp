@@ -12,6 +12,19 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## 3.2.2 (2026-10-30)
+
+Synced to the live server contract of Evlak-Emlak 3.2.2 (main a2c1f8e55, #1028, `pnpm mcp:export-public`; `tools.json` equals
+the live `tools/list`).
+
+Tool names, titles, descriptions, input and output schemas and annotations are unchanged; no tool was added or removed. Only
+the widget URIs in the tool `_meta` move:
+
+- **Widget URIs:** cards `-v3-14`, detail `-v3-11`, price index `-v3-9`. The 3.2.1 URIs keep answering with the current content.
+- **Widgets:** the ChatGPT full-screen panel is reworked (two-line header, one scrolling chip row, one price format on the map), and
+  Arabic room layouts, price ranges and photo counters keep their left-to-right order.
+- `server.json` version 3.2.2; tool count and tool list unchanged.
+
 ## 3.2.1 (2026-10-30)
 
 Synced to the live server contract of Evlak-Emlak 3.2.1 (main 9bf6d27bb, #1026, `pnpm mcp:export-public`; `tools.json` equals
