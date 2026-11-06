@@ -12,6 +12,17 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 > that stopped hand-maintaining `tools.json` and made it a direct projection
 > of the live server's own tool definitions instead.
 
+## Unreleased (repository only, no server change)
+
+- `server.json` carries `icons` (the 512 px PNG and the SVG logomark served by evlek.app). The registry entry shows them from the
+  next published version; 3.2.2 in the registry is immutable.
+- `gemini-extension.json` for the Gemini CLI extension gallery (`httpUrl` = `https://evlek.app/api/mcp`); Live Sync keeps its
+  version in step.
+- `llms-install.md`: the remote install path for Cline and other AI installers.
+- `registry-status.yml`: a manual workflow that marks pre-3.0 registry versions as deprecated.
+- README: the broken Smithery badge is removed (there is no Smithery entry at the moment); the intro states the scope in the
+  canonical words; Gemini CLI and Cline install notes.
+
 ## 3.2.2 (2026-10-30)
 
 Synced to the live server contract of Evlak-Emlak 3.2.2 (main a2c1f8e55, #1028, `pnpm mcp:export-public`; `tools.json` equals

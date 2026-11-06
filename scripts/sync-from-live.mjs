@@ -94,6 +94,7 @@ writeIfChanged('tools.json', JSON.stringify(tools, null, 2) + '\n', changes);
 const setVersion = (text) => text.replace(/("version":\s*")[^"]+(")/, `$1${liveVersion}$2`);
 writeIfChanged('server.json', setVersion(read('server.json')), changes);
 writeIfChanged('package.json', setVersion(read('package.json')), changes);
+writeIfChanged('gemini-extension.json', setVersion(read('gemini-extension.json')), changes);
 const lock = JSON.parse(read('package-lock.json'));
 lock.version = liveVersion;
 if (lock.packages?.['']) lock.packages[''].version = liveVersion;

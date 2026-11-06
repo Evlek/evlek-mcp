@@ -7,11 +7,10 @@ Evlek is the Northern Cyprus property portal: [Northern Cyprus property listings
 [![License](https://img.shields.io/badge/License-MIT-2D8B5C?style=flat-square)](LICENSE)
 [![Coverage](https://img.shields.io/badge/Coverage-North_Cyprus-C9A157?style=flat-square)](https://evlek.app)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-app.evlek-B84E3B?style=flat-square)](https://registry.modelcontextprotocol.io)
-[![smithery badge](https://smithery.ai/badge/onurd8898/evlek)](https://smithery.ai/servers/onurd8898/evlek)
 
 > AI-native property discovery for North Cyprus (KKTC). Built on the Model Context Protocol — works in Claude, ChatGPT, Gemini, Cursor, and any MCP-compatible client.
 
-The Evlek MCP server gives AI agents structured, real-time access to North Cyprus property data — search active listings, compare cities and districts, and track the price index. All data is sourced live from [evlek.app](https://evlek.app). Evlek does not offer a rental-yield or investment-return estimate: figures are descriptive asking-price facts only, never a valuation, forecast, or recommendation. Title-deed (koçan) and legal-procedure tools are deliberately **not** part of the surface: that taxonomy has not passed an independent KKTC legal audit.
+Evlek MCP gives AI assistants read-only access to live Northern Cyprus (KKTC/TRNC) property listings for sale and long-term rent, plus asking-price statistics, in TR, EN, RU, DE and AR. 8 tools, no auth, hosted at https://evlek.app/api/mcp. Asking prices only: no valuations, yield estimates, legal or investment advice.
 
 ## License scope
 
@@ -53,6 +52,19 @@ To add it by hand instead: Settings → Apps & Connectors → Advanced settings 
 ```bash
 claude mcp add --transport http evlek https://evlek.app/api/mcp
 ```
+
+**Gemini CLI**
+
+```bash
+gemini extensions install https://github.com/Evlek/evlek-mcp
+```
+
+The extension ([`gemini-extension.json`](./gemini-extension.json)) points Gemini CLI at `https://evlek.app/api/mcp`.
+
+**Cline**
+
+Ask Cline to install the server from this repository; it follows [`llms-install.md`](./llms-install.md) (remote URL, no
+API key).
 
 **MCP Registry**
 
