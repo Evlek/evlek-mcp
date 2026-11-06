@@ -1,0 +1,10 @@
+{
+  "name": "evlek",
+  "version": "3.2.2",
+  "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data. Read-only, 8 tools.",
+  "mcpServers": {
+    "evlek": {
+      "httpUrl": "https://evlek.app/api/mcp"
+    }
+  }
+}

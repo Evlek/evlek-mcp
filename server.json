@@ -3,6 +3,22 @@
   "name": "app.evlek/mcp-server",
   "title": "Evlek — Northern Cyprus Property MCP Server",
   "description": "Live Northern Cyprus (KKTC/TRNC) property listings and asking-price data. Read-only, 8 tools.",
+  "icons": [
+    {
+      "src": "https://evlek.app/android-chrome-512x512.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    },
+    {
+      "src": "https://evlek.app/icon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ]
+    }
+  ],
   "version": "3.2.2",
   "websiteUrl": "https://evlek.app/mcp",
   "repository": {

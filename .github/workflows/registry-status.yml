@@ -1,0 +1,47 @@
+# Marks old versions of app.evlek/mcp-server in the official MCP Registry as "deprecated" (or back to "active").
+# Manual only. Uses the same DNS (Ed25519) login as registry-publish.yml; needs the MCP_PRIVATE_KEY secret.
+# A deprecated version stays readable in the registry but is flagged for clients and directories that mirror it.
+
+name: MCP Registry version status
+
+on:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: "Space-separated versions to change"
+        required: true
+        default: "1.0.0 1.1.0 1.2.0 1.2.1 1.5.0 1.6.0 1.7.0 1.9.0 2.1.0"
+      status:
+        description: "New status"
+        required: true
+        default: "deprecated"
+        type: choice
+        options: [deprecated, active]
+      message:
+        description: "Status message"
+        required: false
+        default: "Superseded by 3.x: 8 read-only tools for listings and asking-price statistics. Use the latest version."
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install mcp-publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Authenticate to MCP Registry (DNS, Ed25519)
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: ./mcp-publisher login dns --domain evlek.app --private-key "$MCP_PRIVATE_KEY"
+
+      - name: Update version status
+        env:
+          VERSIONS: ${{ inputs.versions }}
+          STATUS: ${{ inputs.status }}
+          MESSAGE: ${{ inputs.message }}
+        run: |
+          for v in $VERSIONS; do
+            case "$v" in 3.*) echo "Refusing to change 3.x version $v"; exit 1;; esac
+            ./mcp-publisher status --status "$STATUS" --message "$MESSAGE" app.evlek/mcp-server "$v"
+          done
